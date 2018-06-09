@@ -28,4 +28,13 @@ public class UserService {
         return (List<User>) userRepository.findAll();
     }
 
+    @GetMapping("/api/user/{userId}")
+    public User findUserById(@PathVariable("userId") int userId) {
+        Optional<User> potentialUser = userRepository.findById(userId);
+        if (potentialUser.isPresent()) {
+            return potentialUser.get();
+        }
+        return null;
+    }
+
 }
