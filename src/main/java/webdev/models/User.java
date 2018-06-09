@@ -21,13 +21,15 @@ public class User {
     private Date dateOfBirth;
     @OneToMany(mappedBy="user")
     @JsonIgnore
-    private List<Recipe> recipes;
+    private List<Recipe> createdRecipes;
+    @ManyToMany(mappedBy = "user")
+    private List<Recipe> savedRecipes;
 
     public User() {
     }
 
     public User(String username, String password, String firstName, String lastName, String phone, String email,
-                String role, Date dateOfBirth, List<Recipe> recipes) {
+                String role, Date dateOfBirth, List<Recipe> createdRecipes, List<Recipe> savedRecipes) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -36,7 +38,8 @@ public class User {
         this.email = email;
         this.role = role;
         this.dateOfBirth = dateOfBirth;
-        this.recipes = recipes;
+        this.createdRecipes = createdRecipes;
+        this.savedRecipes = savedRecipes;
     }
 
     public int getId() {
@@ -111,11 +114,19 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public List<Recipe> getRecipes() {
-        return recipes;
+    public List<Recipe> getCreatedRecipes() {
+        return createdRecipes;
     }
 
-    public void setRecipes(List<Recipe> recipes) {
-        this.recipes = recipes;
+    public void setCreatedRecipes(List<Recipe> createdRecipes) {
+        this.createdRecipes = createdRecipes;
+    }
+
+    public List<Recipe> getSavedRecipes() {
+        return savedRecipes;
+    }
+
+    public void setSavedRecipes(List<Recipe> savedRecipes) {
+        this.savedRecipes = savedRecipes;
     }
 }
