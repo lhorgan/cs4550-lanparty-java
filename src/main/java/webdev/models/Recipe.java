@@ -1,12 +1,10 @@
 package webdev.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import webdev.enumerations.DietLabel;
 import webdev.enumerations.HealthLabel;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity(name="recipe")
@@ -22,9 +20,12 @@ public class Recipe {
     private List<DietLabel> dietTags;
     private String imageUrl;
     private String instructions;
+    @ManyToOne
+    @JsonIgnore
+    private User user;
 
     public Recipe(int id, String name, String description, int numServings, int calories, List<HealthLabel> healthTags,
-                  List<DietLabel> dietTags, String imageUrl, String instructions) {
+                  List<DietLabel> dietTags, String imageUrl, String instructions, User user) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -34,6 +35,7 @@ public class Recipe {
         this.dietTags = dietTags;
         this.imageUrl = imageUrl;
         this.instructions = instructions;
+        this.user = user;
     }
 
     public Recipe() {
@@ -110,5 +112,13 @@ public class Recipe {
 
     public void setInstructions(String instructions) {
         this.instructions = instructions;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
