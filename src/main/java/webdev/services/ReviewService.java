@@ -58,4 +58,9 @@ public class ReviewService {
         }
         return null;
     }
+
+    @DeleteMapping("/api/review/{rid}")
+    public void deleteReview(@PathVariable("rid") int reviewId) {
+        reviewRepository.deleteById(reviewId);
+    }
 }
