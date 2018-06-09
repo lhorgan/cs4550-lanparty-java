@@ -19,6 +19,10 @@ public class User {
     private String email;
     private String role;
     private Date dateOfBirth;
+    private boolean isAdmin;
+    private boolean hasReputation;
+    private boolean isChef;
+
     @OneToMany(mappedBy="user")
     @JsonIgnore
     private List<Recipe> createdRecipes;
@@ -32,9 +36,10 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, String firstName, String lastName, String phone, String email,
-                String role, Date dateOfBirth, List<Recipe> createdRecipes, List<Recipe> savedRecipes,
-                List<Review> reviews) {
+    public User(int id, String username, String password, String firstName, String lastName, String phone, String email,
+                String role, Date dateOfBirth, boolean isAdmin, boolean hasReputation, boolean isChef,
+                List<Recipe> createdRecipes, List<Recipe> savedRecipes, List<Review> reviews) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -43,6 +48,9 @@ public class User {
         this.email = email;
         this.role = role;
         this.dateOfBirth = dateOfBirth;
+        this.isAdmin = isAdmin;
+        this.hasReputation = hasReputation;
+        this.isChef = isChef;
         this.createdRecipes = createdRecipes;
         this.savedRecipes = savedRecipes;
         this.reviews = reviews;
@@ -142,5 +150,29 @@ public class User {
 
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public boolean isHasReputation() {
+        return hasReputation;
+    }
+
+    public void setHasReputation(boolean hasReputation) {
+        this.hasReputation = hasReputation;
+    }
+
+    public boolean isChef() {
+        return isChef;
+    }
+
+    public void setChef(boolean chef) {
+        isChef = chef;
     }
 }
