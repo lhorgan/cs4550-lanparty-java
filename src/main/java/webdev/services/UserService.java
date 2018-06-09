@@ -59,6 +59,9 @@ public class UserService {
             user.setCreatedRecipes(newUser.getCreatedRecipes());
             user.setSavedRecipes(newUser.getSavedRecipes());
             user.setReviews(newUser.getReviews());
+            user.setAdmin(newUser.isAdmin());
+            user.setHasReputation(newUser.isHasReputation());
+            user.setChef(newUser.isChef());
             userRepository.save(user);
             return user;
         }
