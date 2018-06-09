@@ -30,7 +30,7 @@ public class Recipe {
     @ManyToMany(mappedBy="recipe")
     private List<NutrientInfo> totalNutrients;
 
-    @ManyToOne()
+    @ManyToOne
     @JsonIgnore
     private User createdByUser;
     @ManyToMany(mappedBy = "recipe")

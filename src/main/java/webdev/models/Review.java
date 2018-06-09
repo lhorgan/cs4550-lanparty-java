@@ -1,24 +1,25 @@
 package webdev.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 
 @Entity(name="recipe")
 public class Review {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
-    private int userId;
     private int reviewId;
     private String review;
+    @ManyToOne
+    @JsonIgnore
+    private User user;
 
-    public Review(int id, int userId, int reviewId, String review) {
+    public Review(int id, int reviewId, String review, User user) {
         this.id = id;
-        this.userId = userId;
         this.reviewId = reviewId;
         this.review = review;
+        this.user = user;
     }
 
     public Review(){
@@ -33,12 +34,12 @@ public class Review {
         this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public int getReviewId() {

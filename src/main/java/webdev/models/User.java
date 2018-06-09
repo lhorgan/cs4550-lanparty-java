@@ -23,13 +23,18 @@ public class User {
     @JsonIgnore
     private List<Recipe> createdRecipes;
     @ManyToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Recipe> savedRecipes;
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Review> reviews;
 
     public User() {
     }
 
     public User(String username, String password, String firstName, String lastName, String phone, String email,
-                String role, Date dateOfBirth, List<Recipe> createdRecipes, List<Recipe> savedRecipes) {
+                String role, Date dateOfBirth, List<Recipe> createdRecipes, List<Recipe> savedRecipes,
+                List<Review> reviews) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -40,6 +45,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.createdRecipes = createdRecipes;
         this.savedRecipes = savedRecipes;
+        this.reviews = reviews;
     }
 
     public int getId() {
@@ -128,5 +134,13 @@ public class User {
 
     public void setSavedRecipes(List<Recipe> savedRecipes) {
         this.savedRecipes = savedRecipes;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 }
