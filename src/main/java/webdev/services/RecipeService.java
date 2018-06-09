@@ -34,26 +34,37 @@ public class RecipeService {
         return null;
     }
 
-    @GetMapping("/api/user/{uid}/recipe")
-    public List<Recipe> findRecipesByUser(@PathVariable("uid") int userId) {
+    @GetMapping("/api/user/{uid}/recipe/created")
+    public List<Recipe> findRecipesCreatedByUser(@PathVariable("uid") int userId) {
         Optional<User> maybeUser = userRepository.findById(userId);
         if (maybeUser.isPresent()) {
             User user = maybeUser.get();
-            List<Recipe> recipes = user.getRecipes();
+            List<Recipe> recipes = user.getCreatedRecipes();
             return recipes;
         }
         return null;
     }
 
-    @PostMapping("/api/user/{uid}/recipe")
+    @GetMapping("/api/user/{uid}/recipe/saved")
+    public List<Recipe> findRecipesSavedByUser(@PathVariable("uid") int userId) {
+        Optional<User> maybeUser = userRepository.findById(userId);
+        if (maybeUser.isPresent()) {
+            User user = maybeUser.get();
+            List<Recipe> recipes = user.getSavedRecipes();
+            return recipes;
+        }
+        return null;
+    }
+
+    @PostMapping("/api/user/{uid}/recipe/create")
     public Recipe createRecipe(@PathVariable("uid") int userId, @RequestBody Recipe recipe) {
         Optional<User> maybeUser = userRepository.findById(userId);
         if (maybeUser.isPresent()) {
             User user = maybeUser.get();
-            List<Recipe> recipes = user.getRecipes();
+            List<Recipe> recipes = user.getCreatedRecipes();
             recipes.add(recipe);
-            recipe.setUser(user);
-            user.setRecipes(recipes);
+            recipe.setCreatedByUser(user);
+            user.setCreatedRecipes(recipes);
             userRepository.save(user);
             recipeRepository.save(recipe);
             return recipe;
@@ -61,6 +72,25 @@ public class RecipeService {
         return null;
     }
 
+    @PostMapping("/api/user/{uid}/recipe/save")
+    public Recipe saveRecipe(@PathVariable("uid") int userId, @RequestBody Recipe recipe) {
+        Optional<User> maybeUser = userRepository.findById(userId);
+        if (maybeUser.isPresent()) {
+            User user = maybeUser.get();
+            List<Recipe> recipes = user.getSavedRecipes();
+            recipes.add(recipe);
+
+            List<User> recipeSaves = recipe.getSavedByUser();
+            recipeSaves.add(user);
+
+            recipe.setSavedByUser(recipeSaves);
+            user.setSavedRecipes(recipes);
+            userRepository.save(user);
+            recipeRepository.save(recipe);
+            return recipe;
+        }
+        return null;
+    }
 
     @DeleteMapping("/api/recipe/{rid}")
     public void deleteRecipe(@PathVariable("rid") int recipeId) {
