@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import webdev.models.Review;
+import webdev.models.User;
 import webdev.repositories.ReviewRepository;
 import webdev.repositories.UserRepository;
 
@@ -31,6 +32,16 @@ public class ReviewService {
         Optional<Review> maybeReview = reviewRepository.findById(reviewId);
         if (maybeReview.isPresent()) {
             return maybeReview.get();
+        }
+        return null;
+    }
+
+    @GetMapping("/api/user/{uid}/review")
+    public List<Review> findReviewsByUser(@PathVariable("uid") int userId) {
+        Optional<User> maybeUser = userRepository.findById(userId);
+        if (maybeUser.isPresent()) {
+            User user = maybeUser.get();
+            return user.getReviews();
         }
         return null;
     }
