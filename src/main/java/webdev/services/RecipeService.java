@@ -60,4 +60,10 @@ public class RecipeService {
         }
         return null;
     }
+
+
+    @DeleteMapping("/api/recipe/{rid}")
+    public void deleteRecipe(@PathVariable("rid") int recipeId) {
+        recipeRepository.deleteById(recipeId);
+    }
 }
