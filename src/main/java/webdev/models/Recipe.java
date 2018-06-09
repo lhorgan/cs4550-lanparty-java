@@ -12,7 +12,7 @@ public class Recipe {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
-    private int uri;
+    private String uri;
     private String label;
     private String image;
     private String url;
@@ -37,7 +37,7 @@ public class Recipe {
     @JsonIgnore
     private List<User> savedByUser;
 
-    public Recipe(int id, int uri, String label, String image, String url, int yield, float calories,
+    public Recipe(int id, String uri, String label, String image, String url, int yield, float calories,
                   List<DietLabel> dietLabels, List<HealthLabel> healthLabels, String description, String instructions,
                   List<Ingredient> ingredients, List<NutrientInfo> totalNutrients, User createdByUser,
                   List<User> savedByUser) {
@@ -70,11 +70,11 @@ public class Recipe {
         this.id = id;
     }
 
-    public int getUri() {
+    public String getUri() {
         return uri;
     }
 
-    public void setUri(int uri) {
+    public void setUri(String uri) {
         this.uri = uri;
     }
 
