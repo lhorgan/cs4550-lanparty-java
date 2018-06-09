@@ -21,7 +21,7 @@ public class UserService {
     }
 
     @GetMapping("/api/user")
-    public List<User> findAllUsers(@RequestParam(name = "username", required = false) String username) {
+    public List<User> findAllUsers(@RequestParam(name="username", required = false) String username) {
         if (username != null) {
             return (List<User>) userRepository.findUserByUsername(username);
         }
@@ -33,6 +33,25 @@ public class UserService {
         Optional<User> potentialUser = userRepository.findById(userId);
         if (potentialUser.isPresent()) {
             return potentialUser.get();
+        }
+        return null;
+    }
+
+    @PutMapping("/api/user/{userId}")
+    public User updateUser(@RequestBody User newUser, @PathVariable("userId") int userId) {
+        Optional<User> potentialUser = userRepository.findById(userId);
+        if (potentialUser.isPresent()) {
+            User user = potentialUser.get();
+            user.setUsername(newUser.getUsername());
+            user.setPassword(newUser.getPassword());
+            user.setFirstName(newUser.getFirstName());
+            user.setLastName(newUser.getLastName());
+            user.setEmail(newUser.getEmail());
+            user.setPhone(newUser.getPhone());
+            user.setRole(newUser.getRole());
+            user.setDateOfBirth(newUser.getDateOfBirth());
+            userRepository.save(user);
+            return user;
         }
         return null;
     }
