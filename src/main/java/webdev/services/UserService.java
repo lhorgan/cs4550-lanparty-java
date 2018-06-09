@@ -62,6 +62,7 @@ public class UserService {
             user.setAdmin(newUser.isAdmin());
             user.setHasReputation(newUser.isHasReputation());
             user.setChef(newUser.isChef());
+            user.setFollowing(newUser.getFollowing());
             userRepository.save(user);
             return user;
         }
@@ -80,6 +81,23 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    @PostMapping("/api/user/{userId}/follow/{followUserId}")
+    public User followUser(@PathVariable("userId") int userId, @PathVariable("followingUserId") int followUserId) {
+        Optional<User> maybeUser = userRepository.findById(userId);
+        Optional<User> maybeFollowUser = userRepository.findById(followUserId);
+
+        if (maybeUser.isPresent() && maybeFollowUser.isPresent()) {
+            User user = maybeUser.get();
+            User followUser = maybeFollowUser.get();
+
+            List<User> following = user.getFollowing();
+            following.add(followUser);
+            user.setFollowing(following);
+            userRepository.save(user);
+            return followUser;
+        }
+        return null;
+    }
 
     @PostMapping("/api/register")
     public User register(@RequestBody User user, HttpSession session) {
