@@ -1,10 +1,7 @@
 package webdev.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import webdev.models.Review;
 import webdev.models.User;
 import webdev.repositories.ReviewRepository;
@@ -42,6 +39,22 @@ public class ReviewService {
         if (maybeUser.isPresent()) {
             User user = maybeUser.get();
             return user.getReviews();
+        }
+        return null;
+    }
+
+    @PostMapping("/api/user/{uid}/review")
+    public Review createReview(@PathVariable("uid") int userId, @RequestBody Review review) {
+        Optional<User> maybeUser = userRepository.findById(userId);
+        if (maybeUser.isPresent()) {
+            User user = maybeUser.get();
+            List<Review> reviews = user.getReviews();
+            reviews.add(review);
+            review.setUser(user);
+            user.setReviews(reviews);
+            userRepository.save(user);
+            reviewRepository.save(review);
+            return review;
         }
         return null;
     }
