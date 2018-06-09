@@ -1,10 +1,7 @@
 package webdev.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import webdev.models.Recipe;
 import webdev.models.User;
 import webdev.repositories.RecipeRepository;
@@ -44,6 +41,22 @@ public class RecipeService {
             User user = maybeUser.get();
             List<Recipe> recipes = user.getRecipes();
             return recipes;
+        }
+        return null;
+    }
+
+    @PostMapping("/api/user/{uid}/recipe")
+    public Recipe createRecipe(@PathVariable("uid") int userId, @RequestBody Recipe recipe) {
+        Optional<User> maybeUser = userRepository.findById(userId);
+        if (maybeUser.isPresent()) {
+            User user = maybeUser.get();
+            List<Recipe> recipes = user.getRecipes();
+            recipes.add(recipe);
+            recipe.setUser(user);
+            user.setRecipes(recipes);
+            userRepository.save(user);
+            recipeRepository.save(recipe);
+            return recipe;
         }
         return null;
     }
