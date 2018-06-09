@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
+import webdev.models.Review;
 import webdev.models.User;
+import webdev.repositories.ReviewRepository;
 import webdev.repositories.UserRepository;
 
 import javax.servlet.http.HttpSession;
@@ -12,8 +14,11 @@ import javax.servlet.http.HttpSession;
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class UserService {
+
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    ReviewRepository reviewRepository;
 
     @PostMapping("/api/user")
     public User createUser(@RequestBody User user) {
@@ -62,6 +67,13 @@ public class UserService {
 
     @DeleteMapping("/api/user/{userId}")
     public void deleteUser(@PathVariable("userId") int userId) {
+        Optional<User> maybeUser = userRepository.findById(userId);
+        if (maybeUser.isPresent()) {
+            User user = maybeUser.get();
+            for (Review review : user.getReviews()) {
+                reviewRepository.delete(review);
+            }
+        }
         userRepository.deleteById(userId);
     }
 
