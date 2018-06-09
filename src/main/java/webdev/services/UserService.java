@@ -62,4 +62,15 @@ public class UserService {
     }
 
 
+    @PostMapping("/api/register")
+    public User register(@RequestBody User user, HttpSession session) {
+        List<User> newUser = (List<User>) userRepository.findUserByUsername(user.getUsername());
+        if (newUser.size() == 0) {
+            userRepository.save(user);
+            session.setAttribute("user", user);
+            return user;
+        }
+        return null;
+    }
+
 }
