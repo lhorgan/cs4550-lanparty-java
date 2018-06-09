@@ -7,6 +7,7 @@ import webdev.models.User;
 import webdev.repositories.RecipeRepository;
 import webdev.repositories.UserRepository;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,37 +56,47 @@ public class RecipeService {
     }
 
     @PostMapping("/api/user/{uid}/recipe/create")
-    public Recipe createRecipe(@PathVariable("uid") int userId, @RequestBody Recipe recipe) {
+    public Recipe createRecipe(@PathVariable("uid") int userId, @RequestBody Recipe recipe, HttpSession httpSession) {
+        User sessionUser = (User) httpSession.getAttribute("user");
         Optional<User> maybeUser = userRepository.findById(userId);
+
         if (maybeUser.isPresent()) {
             User user = maybeUser.get();
-            List<Recipe> recipes = user.getCreatedRecipes();
-            recipes.add(recipe);
-            recipe.setCreatedByUser(user);
-            user.setCreatedRecipes(recipes);
-            userRepository.save(user);
-            recipeRepository.save(recipe);
-            return recipe;
+
+            if (user.getId() == sessionUser.getId()) {
+                List<Recipe> recipes = user.getCreatedRecipes();
+                recipes.add(recipe);
+                recipe.setCreatedByUser(user);
+                user.setCreatedRecipes(recipes);
+                userRepository.save(user);
+                recipeRepository.save(recipe);
+                return recipe;
+            }
         }
         return null;
     }
 
     @PostMapping("/api/user/{uid}/recipe/save")
-    public Recipe saveRecipe(@PathVariable("uid") int userId, @RequestBody Recipe recipe) {
+    public Recipe saveRecipe(@PathVariable("uid") int userId, @RequestBody Recipe recipe, HttpSession httpSession) {
+        User sessionUser = (User) httpSession.getAttribute("user");
         Optional<User> maybeUser = userRepository.findById(userId);
+
         if (maybeUser.isPresent()) {
             User user = maybeUser.get();
-            List<Recipe> recipes = user.getSavedRecipes();
-            recipes.add(recipe);
 
-            List<User> recipeSaves = recipe.getSavedByUser();
-            recipeSaves.add(user);
+            if (user.getId() == sessionUser.getId()) {
+                List<Recipe> recipes = user.getSavedRecipes();
+                recipes.add(recipe);
 
-            recipe.setSavedByUser(recipeSaves);
-            user.setSavedRecipes(recipes);
-            userRepository.save(user);
-            recipeRepository.save(recipe);
-            return recipe;
+                List<User> recipeSaves = recipe.getSavedByUser();
+                recipeSaves.add(user);
+
+                recipe.setSavedByUser(recipeSaves);
+                user.setSavedRecipes(recipes);
+                userRepository.save(user);
+                recipeRepository.save(recipe);
+                return recipe;
+            }
         }
         return null;
     }
@@ -94,4 +105,6 @@ public class RecipeService {
     public void deleteRecipe(@PathVariable("rid") int recipeId) {
         recipeRepository.deleteById(recipeId);
     }
+
+    
 }
