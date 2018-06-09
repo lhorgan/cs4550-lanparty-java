@@ -39,8 +39,7 @@ public class RecipeService {
         Optional<User> maybeUser = userRepository.findById(userId);
         if (maybeUser.isPresent()) {
             User user = maybeUser.get();
-            List<Recipe> recipes = user.getCreatedRecipes();
-            return recipes;
+            return user.getCreatedRecipes();
         }
         return null;
     }
@@ -50,8 +49,7 @@ public class RecipeService {
         Optional<User> maybeUser = userRepository.findById(userId);
         if (maybeUser.isPresent()) {
             User user = maybeUser.get();
-            List<Recipe> recipes = user.getSavedRecipes();
-            return recipes;
+            return user.getSavedRecipes();
         }
         return null;
     }
