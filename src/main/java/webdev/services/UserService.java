@@ -73,4 +73,18 @@ public class UserService {
         return null;
     }
 
+    @PostMapping("/api/login")
+    public User login(@RequestBody User user, HttpSession session) {
+        String username = user.getUsername();
+        String password = user.getPassword();
+
+        List<User> potentialuser = (List<User>) userRepository.findUserByUsernameAndPassword(username, password);
+
+        if (potentialuser.size() != 0) {
+            session.setAttribute("user", potentialuser.get(0));
+            return potentialuser.get(0);
+        }
+        return null;
+    }
+
 }
