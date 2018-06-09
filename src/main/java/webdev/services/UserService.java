@@ -51,7 +51,8 @@ public class UserService {
             user.setPhone(newUser.getPhone());
             user.setRole(newUser.getRole());
             user.setDateOfBirth(newUser.getDateOfBirth());
-            user.setRecipes(newUser.getRecipes());
+            user.setCreatedRecipes(newUser.getCreatedRecipes());
+            user.setSavedRecipes(newUser.getSavedRecipes());
             userRepository.save(user);
             return user;
         }
