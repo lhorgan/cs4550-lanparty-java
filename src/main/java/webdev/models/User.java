@@ -1,7 +1,10 @@
 package webdev.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity(name="user")
 public class User {
@@ -16,12 +19,15 @@ public class User {
     private String email;
     private String role;
     private Date dateOfBirth;
+    @OneToMany(mappedBy="user")
+    @JsonIgnore
+    private List<Recipe> recipes;
 
     public User() {
     }
 
     public User(String username, String password, String firstName, String lastName, String phone, String email,
-                String role, Date dateOfBirth) {
+                String role, Date dateOfBirth, List<Recipe> recipes) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -30,6 +36,7 @@ public class User {
         this.email = email;
         this.role = role;
         this.dateOfBirth = dateOfBirth;
+        this.recipes = recipes;
     }
 
     public int getId() {
@@ -102,5 +109,13 @@ public class User {
 
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public List<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(List<Recipe> recipes) {
+        this.recipes = recipes;
     }
 }
