@@ -81,8 +81,22 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    @PutMapping("/api/user/profile")
+    public User updateProfile(@RequestBody User user, HttpSession httpSession) {
+        User sessionUser = (User) httpSession.getAttribute("user");
+        if (sessionUser.getId() == user.getId()) {
+            // whatever fields we wanna set here
+
+            userRepository.save(sessionUser);
+            return sessionUser;
+        }
+        return null;
+    }
+
     @PostMapping("/api/user/{userId}/follow/{followUserId}")
-    public User followUser(@PathVariable("userId") int userId, @PathVariable("followingUserId") int followUserId) {
+    public User followUser(@PathVariable("userId") int userId, @PathVariable("followingUserId") int followUserId,
+                           HttpSession httpSession) {
+        User sessionUser = (User) httpSession.getAttribute("user");
         Optional<User> maybeUser = userRepository.findById(userId);
         Optional<User> maybeFollowUser = userRepository.findById(followUserId);
 
@@ -90,11 +104,13 @@ public class UserService {
             User user = maybeUser.get();
             User followUser = maybeFollowUser.get();
 
-            List<User> following = user.getFollowing();
-            following.add(followUser);
-            user.setFollowing(following);
-            userRepository.save(user);
-            return followUser;
+            if (user.getId() == sessionUser.getId()) {
+                List<User> following = user.getFollowing();
+                following.add(followUser);
+                user.setFollowing(following);
+                userRepository.save(user);
+                return followUser;
+            }
         }
         return null;
     }
