@@ -18,25 +18,24 @@ public class Recipe {
     private String url;
     private int yield;
     private float calories;
-//    private List<DietLabel> dietLabels;
-//    private List<HealthLabel> healthLabels;
+    //private List<Integer> dietLabels;
+    //private List<Integer> healthLabels;
 
     private String description;
     private String instructions;
 
-//    @ManyToMany(
-//        cascade = {
-//            CascadeType.PERSIST,
-//            CascadeType.MERGE
-//        }
-//    )
-//    @JoinTable(
-//        name = "recipe_ingredient",
-//        joinColumns = @JoinColumn(name = "recipe_id"),
-//        inverseJoinColumns = @JoinColumn(name = "ingredient_id")
-//    )
-//    @JsonIgnore
-//    private List<Ingredient> ingredients;
+    @ManyToMany(
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        }
+    )
+    @JoinTable(
+        name = "recipe_ingredient",
+        joinColumns = @JoinColumn(name = "recipe_id"),
+        inverseJoinColumns = @JoinColumn(name = "ingredient_id")
+    )
+    private List<Ingredient> ingredients;
 //    @ManyToMany(
 //        cascade = {
 //            CascadeType.PERSIST,
@@ -50,12 +49,12 @@ public class Recipe {
 //    )
 //    private List<NutrientInfo> totalNutrients;
 //
-//    @ManyToOne
-//    @JsonIgnore
-//    private User createdByUser;
-//    @ManyToMany(mappedBy = "recipe")
-//    @JsonIgnore
-//    private List<User> savedByUser;
+    @ManyToOne
+    @JsonIgnore
+    private User createdByUser;
+    @ManyToMany
+    @JsonIgnore
+    private List<User> savedByUser;
 
     public int getId() {
         return id;
@@ -113,14 +112,14 @@ public class Recipe {
         this.calories = calories;
     }
 
-//    public List<Ingredient> getIngredients() {
-//        return ingredients;
-//    }
-//
-//    public void setIngredients(List<Ingredient> ingredients) {
-//        this.ingredients = ingredients;
-//    }
-//
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
 //    public List<NutrientInfo> getTotalNutrients() {
 //        return totalNutrients;
 //    }
@@ -161,19 +160,19 @@ public class Recipe {
         this.instructions = instructions;
     }
 
-//    public User getCreatedByUser() {
-//        return createdByUser;
-//    }
-//
-//    public void setCreatedByUser(User createdByUser) {
-//        this.createdByUser = createdByUser;
-//    }
-//
-//    public List<User> getSavedByUser() {
-//        return savedByUser;
-//    }
-//
-//    public void setSavedByUser(List<User> savedByUser) {
-//        this.savedByUser = savedByUser;
-//    }
+    public User getCreatedByUser() {
+        return createdByUser;
+    }
+
+    public void setCreatedByUser(User createdByUser) {
+        this.createdByUser = createdByUser;
+    }
+
+    public List<User> getSavedByUser() {
+        return savedByUser;
+    }
+
+    public void setSavedByUser(List<User> savedByUser) {
+        this.savedByUser = savedByUser;
+    }
 }

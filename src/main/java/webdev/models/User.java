@@ -23,18 +23,35 @@ public class User {
     private boolean hasReputation;
     private boolean isChef;
 
-//    @OneToMany(mappedBy="user")
-//    @JsonIgnore
-//    private List<Recipe> createdRecipes;
-//    @ManyToMany(mappedBy = "user")
-//    @JsonIgnore
-//    private List<Recipe> savedRecipes;
-//    @OneToMany(mappedBy = "user")
-//    @JsonIgnore
-//    private List<Review> reviews;
-//    @ManyToMany(mappedBy = "user")
-//    @JsonIgnore
-//    private List<User> following;
+    @OneToMany(mappedBy="createdByUser")
+    private List<Recipe> createdRecipes;
+    @ManyToMany(
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        }
+    )
+    @JoinTable(
+        name = "recipe_ingredient",
+        joinColumns = @JoinColumn(name = "recipe_id"),
+        inverseJoinColumns = @JoinColumn(name = "ingredient_id")
+    )
+    private List<Recipe> savedRecipes;
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews;
+    @ManyToMany(
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        }
+    )
+    @JoinTable(
+        name = "user_user",
+        joinColumns = @JoinColumn(name = "user_id_a"),
+        inverseJoinColumns = @JoinColumn(name = "user_id_b")
+    )
+    @JsonIgnore
+    private List<User> following;
 
     public int getId() {
         return id;
@@ -108,29 +125,29 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-//    public List<Recipe> getCreatedRecipes() {
-//        return createdRecipes;
-//    }
-//
-//    public void setCreatedRecipes(List<Recipe> createdRecipes) {
-//        this.createdRecipes = createdRecipes;
-//    }
-//
-//    public List<Recipe> getSavedRecipes() {
-//        return savedRecipes;
-//    }
-//
-//    public void setSavedRecipes(List<Recipe> savedRecipes) {
-//        this.savedRecipes = savedRecipes;
-//    }
-//
-//    public List<Review> getReviews() {
-//        return reviews;
-//    }
-//
-//    public void setReviews(List<Review> reviews) {
-//        this.reviews = reviews;
-//    }
+    public List<Recipe> getCreatedRecipes() {
+        return createdRecipes;
+    }
+
+    public void setCreatedRecipes(List<Recipe> createdRecipes) {
+        this.createdRecipes = createdRecipes;
+    }
+
+    public List<Recipe> getSavedRecipes() {
+        return savedRecipes;
+    }
+
+    public void setSavedRecipes(List<Recipe> savedRecipes) {
+        this.savedRecipes = savedRecipes;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 
     public boolean isAdmin() {
         return isAdmin;
@@ -156,11 +173,11 @@ public class User {
         isChef = chef;
     }
 
-//    public List<User> getFollowing() {
-//        return following;
-//    }
-//
-//    public void setFollowing(List<User> following) {
-//        this.following = following;
-//    }
+    public List<User> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<User> following) {
+        this.following = following;
+    }
 }

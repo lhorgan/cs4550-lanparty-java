@@ -1,9 +1,9 @@
 package webdev.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Ingredient {
@@ -15,6 +15,8 @@ public class Ingredient {
 //    private Measure measure;
     private float weight;
 //    private Food food;
+    @ManyToMany
+    private List<Recipe> recipes;
 
     public int getId() {
         return id;
@@ -55,4 +57,12 @@ public class Ingredient {
 //    public void setFood(Food food) {
 //        this.food = food;
 //    }
+
+    public List<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(List<Recipe> recipes) {
+        this.recipes = recipes;
+    }
 }
