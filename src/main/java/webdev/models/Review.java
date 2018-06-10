@@ -15,17 +15,6 @@ public class Review {
     @JsonIgnore
     private User user;
 
-    public Review(int id, int reviewId, String review, User user) {
-        this.id = id;
-        this.reviewId = reviewId;
-        this.review = review;
-        this.user = user;
-    }
-
-    public Review(){
-
-    }
-
     public int getId() {
         return id;
     }

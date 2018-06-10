@@ -13,15 +13,6 @@ public class Food {
     private int id;
     private String label;
 
-    public Food(int id, String label) {
-        this.id = id;
-        this.label = label;
-    }
-
-    public Food() {
-
-    }
-
     public int getId() {
         return id;
     }

@@ -57,31 +57,6 @@ public class Recipe {
     @JsonIgnore
     private List<User> savedByUser;
 
-    public Recipe(int id, String uri, String label, String image, String url, int yield, float calories,
-                  List<DietLabel> dietLabels, List<HealthLabel> healthLabels, String description, String instructions,
-                  List<Ingredient> ingredients, List<NutrientInfo> totalNutrients, User createdByUser,
-                  List<User> savedByUser) {
-        this.id = id;
-        this.uri = uri;
-        this.label = label;
-        this.image = image;
-        this.url = url;
-        this.yield = yield;
-        this.calories = calories;
-        this.dietLabels = dietLabels;
-        this.healthLabels = healthLabels;
-        this.description = description;
-        this.instructions = instructions;
-        this.ingredients = ingredients;
-        this.totalNutrients = totalNutrients;
-        this.createdByUser = createdByUser;
-        this.savedByUser = savedByUser;
-    }
-
-    public Recipe() {
-
-    }
-
     public int getId() {
         return id;
     }

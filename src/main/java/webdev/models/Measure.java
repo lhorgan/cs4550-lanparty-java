@@ -13,14 +13,6 @@ public class Measure {
     private int id;
     private String label;
 
-    public Measure(int id, String label) {
-        this.id = id;
-        this.label = label;
-    }
-
-    public Measure() {
-
-    }
 
     public int getId() {
         return id;

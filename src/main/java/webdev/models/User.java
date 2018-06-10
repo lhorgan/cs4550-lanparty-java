@@ -36,30 +36,6 @@ public class User {
     @JsonIgnore
     private List<User> following;
 
-    public User() {
-    }
-
-    public User(int id, String username, String password, String firstName, String lastName, String phone, String email,
-                String role, Date dateOfBirth, boolean isAdmin, boolean hasReputation, boolean isChef,
-                List<Recipe> createdRecipes, List<Recipe> savedRecipes, List<Review> reviews, List<User> following) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
-        this.email = email;
-        this.role = role;
-        this.dateOfBirth = dateOfBirth;
-        this.isAdmin = isAdmin;
-        this.hasReputation = hasReputation;
-        this.isChef = isChef;
-        this.createdRecipes = createdRecipes;
-        this.savedRecipes = savedRecipes;
-        this.reviews = reviews;
-        this.following = following;
-    }
-
     public int getId() {
         return id;
     }

@@ -16,18 +16,6 @@ public class Ingredient {
     private float weight;
     private Food food;
 
-    public Ingredient(int id, float quantity, Measure measure, float weight, Food food) {
-        this.id = id;
-        this.quantity = quantity;
-        this.measure = measure;
-        this.weight = weight;
-        this.food = food;
-    }
-
-    public Ingredient() {
-
-    }
-
     public int getId() {
         return id;
     }
