@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
-@Entity(name="recipe")
+@Entity
 public class Review {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

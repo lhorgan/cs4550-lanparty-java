@@ -24,10 +24,30 @@ public class Recipe {
     private String description;
     private String instructions;
 
-    @ManyToMany(mappedBy="recipe")
+    @ManyToMany(
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        }
+    )
+    @JoinTable(
+        name = "recipe_ingredient",
+        joinColumns = @JoinColumn(name = "recipe_id"),
+        inverseJoinColumns = @JoinColumn(name = "ingredient_id")
+    )
     @JsonIgnore
     private List<Ingredient> ingredients;
-    @ManyToMany(mappedBy="recipe")
+    @ManyToMany(
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        }
+    )
+    @JoinTable(
+        name = "recipe_nutrientInfo",
+        joinColumns = @JoinColumn(name = "recipe_id"),
+        inverseJoinColumns = @JoinColumn(name = "nutrientInfo_id")
+    )
     private List<NutrientInfo> totalNutrients;
 
     @ManyToOne
