@@ -12,9 +12,9 @@ public class Ingredient {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
     private float quantity;
-    private Measure measure;
+//    private Measure measure;
     private float weight;
-    private Food food;
+//    private Food food;
 
     public int getId() {
         return id;
@@ -32,13 +32,13 @@ public class Ingredient {
         this.quantity = quantity;
     }
 
-    public Measure getMeasure() {
-        return measure;
-    }
-
-    public void setMeasure(Measure measure) {
-        this.measure = measure;
-    }
+//    public Measure getMeasure() {
+//        return measure;
+//    }
+//
+//    public void setMeasure(Measure measure) {
+//        this.measure = measure;
+//    }
 
     public float getWeight() {
         return weight;
@@ -48,11 +48,11 @@ public class Ingredient {
         this.weight = weight;
     }
 
-    public Food getFood() {
-        return food;
-    }
-
-    public void setFood(Food food) {
-        this.food = food;
-    }
+//    public Food getFood() {
+//        return food;
+//    }
+//
+//    public void setFood(Food food) {
+//        this.food = food;
+//    }
 }

@@ -11,9 +11,9 @@ public class Review {
     private int id;
     private int reviewId;
     private String review;
-    @ManyToOne
-    @JsonIgnore
-    private User user;
+//    @ManyToOne
+//    @JsonIgnore
+//    private User user;
 
     public int getId() {
         return id;
@@ -23,13 +23,13 @@ public class Review {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
 
     public int getReviewId() {
         return reviewId;

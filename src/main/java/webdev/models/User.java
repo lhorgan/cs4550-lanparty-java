@@ -23,18 +23,18 @@ public class User {
     private boolean hasReputation;
     private boolean isChef;
 
-    @OneToMany(mappedBy="user")
-    @JsonIgnore
-    private List<Recipe> createdRecipes;
-    @ManyToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<Recipe> savedRecipes;
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<Review> reviews;
-    @ManyToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<User> following;
+//    @OneToMany(mappedBy="user")
+//    @JsonIgnore
+//    private List<Recipe> createdRecipes;
+//    @ManyToMany(mappedBy = "user")
+//    @JsonIgnore
+//    private List<Recipe> savedRecipes;
+//    @OneToMany(mappedBy = "user")
+//    @JsonIgnore
+//    private List<Review> reviews;
+//    @ManyToMany(mappedBy = "user")
+//    @JsonIgnore
+//    private List<User> following;
 
     public int getId() {
         return id;
@@ -108,29 +108,29 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public List<Recipe> getCreatedRecipes() {
-        return createdRecipes;
-    }
-
-    public void setCreatedRecipes(List<Recipe> createdRecipes) {
-        this.createdRecipes = createdRecipes;
-    }
-
-    public List<Recipe> getSavedRecipes() {
-        return savedRecipes;
-    }
-
-    public void setSavedRecipes(List<Recipe> savedRecipes) {
-        this.savedRecipes = savedRecipes;
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
+//    public List<Recipe> getCreatedRecipes() {
+//        return createdRecipes;
+//    }
+//
+//    public void setCreatedRecipes(List<Recipe> createdRecipes) {
+//        this.createdRecipes = createdRecipes;
+//    }
+//
+//    public List<Recipe> getSavedRecipes() {
+//        return savedRecipes;
+//    }
+//
+//    public void setSavedRecipes(List<Recipe> savedRecipes) {
+//        this.savedRecipes = savedRecipes;
+//    }
+//
+//    public List<Review> getReviews() {
+//        return reviews;
+//    }
+//
+//    public void setReviews(List<Review> reviews) {
+//        this.reviews = reviews;
+//    }
 
     public boolean isAdmin() {
         return isAdmin;
@@ -156,11 +156,11 @@ public class User {
         isChef = chef;
     }
 
-    public List<User> getFollowing() {
-        return following;
-    }
-
-    public void setFollowing(List<User> following) {
-        this.following = following;
-    }
+//    public List<User> getFollowing() {
+//        return following;
+//    }
+//
+//    public void setFollowing(List<User> following) {
+//        this.following = following;
+//    }
 }
