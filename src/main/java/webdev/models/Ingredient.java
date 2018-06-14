@@ -14,7 +14,8 @@ public class Ingredient {
     private float quantity;
 //    private Measure measure;
     private float weight;
-//    private Food food;
+    @ManyToOne
+    private Food food;
     @ManyToMany
     private List<Recipe> recipes;
 
@@ -50,13 +51,13 @@ public class Ingredient {
         this.weight = weight;
     }
 
-//    public Food getFood() {
-//        return food;
-//    }
-//
-//    public void setFood(Food food) {
-//        this.food = food;
-//    }
+    public Food getFood() {
+        return food;
+    }
+
+    public void setFood(Food food) {
+        this.food = food;
+    }
 
     public List<Recipe> getRecipes() {
         return recipes;

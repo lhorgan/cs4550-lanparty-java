@@ -1,9 +1,9 @@
 package webdev.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Food {
@@ -12,6 +12,10 @@ public class Food {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
     private String label;
+
+    @OneToMany(mappedBy="food")
+    @JsonIgnore
+    private List<Ingredient> ingredients; // ingredients I belong to
 
     public int getId() {
         return id;
@@ -27,5 +31,13 @@ public class Food {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 }
