@@ -1,9 +1,6 @@
 package webdev.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import webdev.enumerations.DietLabel;
-import webdev.enumerations.HealthLabel;
-
 import javax.persistence.*;
 import java.util.List;
 

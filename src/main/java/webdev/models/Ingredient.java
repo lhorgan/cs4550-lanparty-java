@@ -1,7 +1,5 @@
 package webdev.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -14,11 +12,11 @@ public class Ingredient {
     private float quantity;
 //    private Measure measure;
     private float weight;
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     private Food food;
     @ManyToMany
     private List<Recipe> recipes;
-
+    
     public int getId() {
         return id;
     }

@@ -2,6 +2,9 @@ package webdev.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import webdev.models.Food;
+import webdev.models.Ingredient;
 import webdev.models.Recipe;
 import webdev.models.User;
 import webdev.repositories.RecipeRepository;
@@ -74,7 +77,12 @@ public class RecipeService {
             }
         }
         return null;*/
-      return recipeRepository.save(recipe);
+    	/*List<Food> foods;
+    	for(Ingredient ingredient : recipe.getIngredients()) {
+    		ingredient.getFood().getIngredients().add(ingredient);
+    	}*/
+    	System.out.println("Let's save this sucker!");
+        return recipeRepository.save(recipe);
     }
 
     @PostMapping("/api/user/{uid}/recipe/save")
@@ -106,6 +114,4 @@ public class RecipeService {
     public void deleteRecipe(@PathVariable("rid") int recipeId) {
         recipeRepository.deleteById(recipeId);
     }
-
-
 }

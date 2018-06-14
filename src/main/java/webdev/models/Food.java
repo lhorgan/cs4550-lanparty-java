@@ -12,11 +12,11 @@ public class Food {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
     private String label;
-
+    
     @OneToMany(mappedBy="food")
     @JsonIgnore
     private List<Ingredient> ingredients; // ingredients I belong to
-
+    
     public int getId() {
         return id;
     }
