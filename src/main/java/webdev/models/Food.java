@@ -4,18 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
+@IdClass(FoodId.class)
 public class Food {
-
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
+    @Id
     private String label;
     
     @OneToMany(mappedBy="food")
     @JsonIgnore
-    private List<Ingredient> ingredients; // ingredients I belong to
+    private Set<Ingredient> ingredients; // ingredients I belong to
     
     public int getId() {
         return id;
@@ -33,11 +34,11 @@ public class Food {
         this.label = label;
     }
 
-    public List<Ingredient> getIngredients() {
+    public Set<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
+    public void setIngredients(Set<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 }
