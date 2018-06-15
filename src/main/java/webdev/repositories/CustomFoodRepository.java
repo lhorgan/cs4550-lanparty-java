@@ -71,11 +71,11 @@ public class CustomFoodRepository implements FoodRepository {
 			return (S) foodRepository.save(existing);
 		}
 		System.out.println("SAVING NEEW FOOD!");*/
-		Iterable<Food> foods = foodRepository.findFoodByLabel(food.getLabel());
+		/*Iterable<Food> foods = foodRepository.findFoodByLabel(food.getLabel());
 		for(Food existingFood : foods) {
 			existingFood.addIngredients(food.getIngredients());
 			return (S) foodRepository.save(existingFood);
-		}
+		}*/
 		
 		return foodRepository.save(food);
 	}

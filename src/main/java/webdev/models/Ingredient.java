@@ -12,7 +12,7 @@ public class Ingredient {
     private float quantity;
 //    private Measure measure;
     private float weight;
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade=CascadeType.MERGE)
     private Food food;
     @ManyToMany
     private List<Recipe> recipes;

@@ -10,22 +10,24 @@ import java.util.List;
 @Entity
 public class Food {
 
-    @Id
+    /*@Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int id;
+    private int id;*/
+	@Id
+	@Column(name="label", nullable=false)
     private String label;
     
     @OneToMany(mappedBy="food")
     @JsonIgnore
     private List<Ingredient> ingredients; // ingredients I belong to
     
-    public int getId() {
+    /*public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
+    }*/
 
     public String getLabel() {
         return label;
