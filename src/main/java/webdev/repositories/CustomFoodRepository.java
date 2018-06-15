@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import webdev.models.Food;
 
+@Repository("customFoodRepository")
 public class CustomFoodRepository implements FoodRepository {
 	@Autowired
     @Qualifier("foodRepository") // inject Spring implementation here
@@ -61,11 +62,21 @@ public class CustomFoodRepository implements FoodRepository {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <S extends Food> S save(S food) {
-		System.out.println("SAVING FOOD!");
+		/*System.out.println("SAVING FOOD!");
 		Optional<Food> existingFood = foodRepository.findFoodByLabel(food.getLabel());
 		if(existingFood.isPresent()) {
-			return (S) existingFood.get();
+			Food existing = existingFood.get();
+			existing.addIngredients(food.getIngredients());
+			System.out.println("SAVING EXISTING FOOD!");
+			return (S) foodRepository.save(existing);
 		}
+		System.out.println("SAVING NEEW FOOD!");*/
+		Iterable<Food> foods = foodRepository.findFoodByLabel(food.getLabel());
+		for(Food existingFood : foods) {
+			existingFood.addIngredients(food.getIngredients());
+			return (S) foodRepository.save(existingFood);
+		}
+		
 		return foodRepository.save(food);
 	}
 
@@ -76,7 +87,7 @@ public class CustomFoodRepository implements FoodRepository {
 	}
 
 	@Override
-	public Optional<Food> findFoodByLabel(String label) {
+	public Iterable<Food> findFoodByLabel(String label) {
 		return foodRepository.findFoodByLabel(label);
 	}
 }

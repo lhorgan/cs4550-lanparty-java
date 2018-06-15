@@ -13,8 +13,7 @@ import org.springframework.stereotype.Repository;
 import webdev.models.Food;
 import webdev.models.User;
 
-@Repository("foodRepository")
 public interface FoodRepository extends CrudRepository<Food, Integer> {	
-	@Query(value = "SELECT f FROM food f WHERE f.label=:label", nativeQuery=true)
-    Optional<Food> findFoodByLabel(@Param("label") String string);
+	@Query(value = "SELECT label FROM food f WHERE f.label=:label", nativeQuery=true)
+    Iterable<Food> findFoodByLabel(@Param("label") String string);
 }

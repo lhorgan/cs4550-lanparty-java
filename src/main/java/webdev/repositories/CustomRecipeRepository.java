@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import webdev.models.Food;
 import webdev.models.Ingredient;
 import webdev.models.Recipe;
 
@@ -14,6 +15,10 @@ public class CustomRecipeRepository implements RecipeRepository {
 	@Autowired
     @Qualifier("recipeRepository") // inject Spring implementation here
     private RecipeRepository recipeRepository;
+	
+	@Autowired
+    @Qualifier("customFoodRepository") // inject Spring implementation here
+    private FoodRepository foodRepository;
 	
 	@Override
 	public long count() {
@@ -62,7 +67,12 @@ public class CustomRecipeRepository implements RecipeRepository {
 
 	@Override
 	public <S extends Recipe> S save(S recipe) {
-		System.out.println("\nSAVING RECIPEEEEEE\n");
+		//System.out.println("\nSAVING RECIPEEEEEE\n");
+		for(Ingredient ingredient: recipe.getIngredients()) {
+			Food f = ingredient.getFood();
+			f.addIngredient(ingredient);
+			foodRepository.save(f);
+		}
 		return recipeRepository.save(recipe);
 	}
 
@@ -70,5 +80,4 @@ public class CustomRecipeRepository implements RecipeRepository {
 	public <S extends Recipe> Iterable<S> saveAll(Iterable<S> recipes) {
 		return recipeRepository.saveAll(recipes);
 	}
-
 }
