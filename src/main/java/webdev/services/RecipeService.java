@@ -1,6 +1,7 @@
 package webdev.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import webdev.models.Food;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class RecipeService {
 
     @Autowired
+    @Qualifier("customRecipeRepository")
     RecipeRepository recipeRepository;
 
     @Autowired
