@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import webdev.enumerations.DietLabel;
 import webdev.models.Food;
 import webdev.models.Ingredient;
 import webdev.models.Measure;
@@ -81,7 +82,12 @@ public class CustomRecipeRepository implements RecipeRepository {
 			Measure m = ingredient.getMeasure();
 			m.addIngredient(ingredient);
 			measureRepository.save(m);
+			
 		}
+		
+		/*for(DietLabel label : recipe.getDietLabels()) {
+		}*/
+		
 		return recipeRepository.save(recipe);
 	}
 

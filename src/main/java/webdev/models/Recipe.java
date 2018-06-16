@@ -1,7 +1,13 @@
 package webdev.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import webdev.enumerations.DietLabel;
+
 import javax.persistence.*;
+
+import org.hibernate.annotations.Cascade;
+
 import java.util.List;
 
 @Entity(name="recipe")
@@ -20,7 +26,20 @@ public class Recipe {
 
     private String description;
     private String instructions;
-
+    
+    @ManyToMany(
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        }
+    )
+    @JoinTable(
+        name = "recipe_dietlabel",
+        joinColumns = @JoinColumn(name = "recipe_id"),
+        inverseJoinColumns = @JoinColumn(name = "dietlabel_id")
+    )
+    private List<DietLabelEntry> dietlabels;
+    
     @ManyToMany(
         cascade = {
             CascadeType.PERSIST,
@@ -110,7 +129,7 @@ public class Recipe {
     }
 
     public List<Ingredient> getIngredients() {
-        return ingredients;
+        return this.ingredients;
     }
 
     public void setIngredients(List<Ingredient> ingredients) {
@@ -125,13 +144,13 @@ public class Recipe {
 //        this.totalNutrients = totalNutrients;
 //    }
 
-//    public List<DietLabel> getDietLabels() {
-//        return dietLabels;
-//    }
-//
-//    public void setDietLabels(List<DietLabel> dietLabels) {
-//        this.dietLabels = dietLabels;
-//    }
+	  public List<DietLabelEntry> getDietLabels() {
+	      return this.dietlabels;
+	  }
+		
+	  public void setDietLabels(List<DietLabelEntry> dietlabels) {
+		  this.dietlabels = dietlabels;
+	  }
 //
 //    public List<HealthLabel> getHealthLabels() {
 //        return healthLabels;

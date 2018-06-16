@@ -84,6 +84,9 @@ public class RecipeService {
     		ingredient.getFood().getIngredients().add(ingredient);
     	}*/
     	System.out.println("Let's save this sucker!");
+    	System.out.println(recipe);
+    	System.out.println(recipe.getDietLabels());
+    	System.out.println(recipe.getIngredients());
         return recipeRepository.save(recipe);
     }
 
