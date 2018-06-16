@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import webdev.models.Food;
 import webdev.models.Ingredient;
+import webdev.models.Measure;
 import webdev.models.Recipe;
 
 @Repository("customRecipeRepository")
@@ -19,6 +20,10 @@ public class CustomRecipeRepository implements RecipeRepository {
 	@Autowired
     @Qualifier("customFoodRepository") // inject Spring implementation here
     private FoodRepository foodRepository;
+	
+	@Autowired
+    //@Qualifier("customMeasureRepository") // inject Spring implementation here
+    private MeasureRepository measureRepository;
 	
 	@Override
 	public long count() {
@@ -72,6 +77,10 @@ public class CustomRecipeRepository implements RecipeRepository {
 			Food f = ingredient.getFood();
 			f.addIngredient(ingredient);
 			foodRepository.save(f);
+			
+			Measure m = ingredient.getMeasure();
+			m.addIngredient(ingredient);
+			measureRepository.save(m);
 		}
 		return recipeRepository.save(recipe);
 	}

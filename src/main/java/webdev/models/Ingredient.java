@@ -10,10 +10,15 @@ public class Ingredient {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
     private float quantity;
-//    private Measure measure;
+    
+    @ManyToOne(cascade=CascadeType.MERGE)
+    private Measure measure;
+    
     private float weight;
+    
     @ManyToOne(cascade=CascadeType.MERGE)
     private Food food;
+    
     @ManyToMany
     private List<Recipe> recipes;
     
@@ -33,13 +38,13 @@ public class Ingredient {
         this.quantity = quantity;
     }
 
-//    public Measure getMeasure() {
-//        return measure;
-//    }
-//
-//    public void setMeasure(Measure measure) {
-//        this.measure = measure;
-//    }
+    public Measure getMeasure() {
+        return measure;
+    }
+
+    public void setMeasure(Measure measure) {
+        this.measure = measure;
+    }
 
     public float getWeight() {
         return weight;
