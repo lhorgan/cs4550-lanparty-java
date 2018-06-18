@@ -1,3 +1,5 @@
+.settings/
 .idea/
 lanparty-java.iml
 /target/
+.project

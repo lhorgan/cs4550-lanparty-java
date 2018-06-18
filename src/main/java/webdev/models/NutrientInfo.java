@@ -14,19 +14,6 @@ public class NutrientInfo {
     private float quantity;
     private String unit;
 
-
-
-    public NutrientInfo(int id, String label, float quantity, String unit) {
-        this.id = id;
-        this.label = label;
-        this.quantity = quantity;
-        this.unit = unit;
-    }
-
-    public NutrientInfo() {
-
-    }
-
     public int getId() {
         return id;
     }

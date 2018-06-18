@@ -1,9 +1,7 @@
 package webdev.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Ingredient {
@@ -12,22 +10,18 @@ public class Ingredient {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
     private float quantity;
+    
+    @ManyToOne(cascade=CascadeType.MERGE)
     private Measure measure;
+    
     private float weight;
+    
+    @ManyToOne(cascade=CascadeType.MERGE)
     private Food food;
-
-    public Ingredient(int id, float quantity, Measure measure, float weight, Food food) {
-        this.id = id;
-        this.quantity = quantity;
-        this.measure = measure;
-        this.weight = weight;
-        this.food = food;
-    }
-
-    public Ingredient() {
-
-    }
-
+    
+    @ManyToMany
+    private List<Recipe> recipes;
+    
     public int getId() {
         return id;
     }
@@ -66,5 +60,13 @@ public class Ingredient {
 
     public void setFood(Food food) {
         this.food = food;
+    }
+
+    public List<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(List<Recipe> recipes) {
+        this.recipes = recipes;
     }
 }

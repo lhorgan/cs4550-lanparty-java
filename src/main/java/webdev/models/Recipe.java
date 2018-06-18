@@ -1,10 +1,13 @@
 package webdev.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import webdev.enumerations.DietLabel;
-import webdev.enumerations.HealthLabel;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.Cascade;
+
 import java.util.List;
 
 @Entity(name="recipe")
@@ -18,12 +21,25 @@ public class Recipe {
     private String url;
     private int yield;
     private float calories;
-    private List<DietLabel> dietLabels;
-    private List<HealthLabel> healthLabels;
+    //private List<Integer> dietLabels;
+    //private List<Integer> healthLabels;
 
     private String description;
     private String instructions;
-
+    
+    @ManyToMany(
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        }
+    )
+    @JoinTable(
+        name = "recipe_dietlabel",
+        joinColumns = @JoinColumn(name = "recipe_id"),
+        inverseJoinColumns = @JoinColumn(name = "dietlabel_id")
+    )
+    private List<DietLabelEntry> dietlabels;
+    
     @ManyToMany(
         cascade = {
             CascadeType.PERSIST,
@@ -35,52 +51,26 @@ public class Recipe {
         joinColumns = @JoinColumn(name = "recipe_id"),
         inverseJoinColumns = @JoinColumn(name = "ingredient_id")
     )
-    @JsonIgnore
     private List<Ingredient> ingredients;
-    @ManyToMany(
-        cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-        }
-    )
-    @JoinTable(
-        name = "recipe_nutrientInfo",
-        joinColumns = @JoinColumn(name = "recipe_id"),
-        inverseJoinColumns = @JoinColumn(name = "nutrientInfo_id")
-    )
-    private List<NutrientInfo> totalNutrients;
-
+//    @ManyToMany(
+//        cascade = {
+//            CascadeType.PERSIST,
+//            CascadeType.MERGE
+//        }
+//    )
+//    @JoinTable(
+//        name = "recipe_nutrientInfo",
+//        joinColumns = @JoinColumn(name = "recipe_id"),
+//        inverseJoinColumns = @JoinColumn(name = "nutrientInfo_id")
+//    )
+//    private List<NutrientInfo> totalNutrients;
+//
     @ManyToOne
     @JsonIgnore
     private User createdByUser;
-    @ManyToMany(mappedBy = "recipe")
+    @ManyToMany
     @JsonIgnore
     private List<User> savedByUser;
-
-    public Recipe(int id, String uri, String label, String image, String url, int yield, float calories,
-                  List<DietLabel> dietLabels, List<HealthLabel> healthLabels, String description, String instructions,
-                  List<Ingredient> ingredients, List<NutrientInfo> totalNutrients, User createdByUser,
-                  List<User> savedByUser) {
-        this.id = id;
-        this.uri = uri;
-        this.label = label;
-        this.image = image;
-        this.url = url;
-        this.yield = yield;
-        this.calories = calories;
-        this.dietLabels = dietLabels;
-        this.healthLabels = healthLabels;
-        this.description = description;
-        this.instructions = instructions;
-        this.ingredients = ingredients;
-        this.totalNutrients = totalNutrients;
-        this.createdByUser = createdByUser;
-        this.savedByUser = savedByUser;
-    }
-
-    public Recipe() {
-
-    }
 
     public int getId() {
         return id;
@@ -139,36 +129,36 @@ public class Recipe {
     }
 
     public List<Ingredient> getIngredients() {
-        return ingredients;
+        return this.ingredients;
     }
 
     public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
-    public List<NutrientInfo> getTotalNutrients() {
-        return totalNutrients;
-    }
+//    public List<NutrientInfo> getTotalNutrients() {
+//        return totalNutrients;
+//    }
+//
+//    public void setTotalNutrients(List<NutrientInfo> totalNutrients) {
+//        this.totalNutrients = totalNutrients;
+//    }
 
-    public void setTotalNutrients(List<NutrientInfo> totalNutrients) {
-        this.totalNutrients = totalNutrients;
-    }
-
-    public List<DietLabel> getDietLabels() {
-        return dietLabels;
-    }
-
-    public void setDietLabels(List<DietLabel> dietLabels) {
-        this.dietLabels = dietLabels;
-    }
-
-    public List<HealthLabel> getHealthLabels() {
-        return healthLabels;
-    }
-
-    public void setHealthLabels(List<HealthLabel> healthLabels) {
-        this.healthLabels = healthLabels;
-    }
+	  public List<DietLabelEntry> getDietLabels() {
+	      return this.dietlabels;
+	  }
+		
+	  public void setDietLabels(List<DietLabelEntry> dietlabels) {
+		  this.dietlabels = dietlabels;
+	  }
+//
+//    public List<HealthLabel> getHealthLabels() {
+//        return healthLabels;
+//    }
+//
+//    public void setHealthLabels(List<HealthLabel> healthLabels) {
+//        this.healthLabels = healthLabels;
+//    }
 
     public String getDescription() {
         return description;

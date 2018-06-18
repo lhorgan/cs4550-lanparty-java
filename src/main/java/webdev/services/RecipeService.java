@@ -1,7 +1,11 @@
 package webdev.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
+
+import webdev.models.Food;
+import webdev.models.Ingredient;
 import webdev.models.Recipe;
 import webdev.models.User;
 import webdev.repositories.RecipeRepository;
@@ -16,6 +20,7 @@ import java.util.Optional;
 public class RecipeService {
 
     @Autowired
+    @Qualifier("customRecipeRepository")
     RecipeRepository recipeRepository;
 
     @Autowired
@@ -57,7 +62,7 @@ public class RecipeService {
 
     @PostMapping("/api/user/{uid}/recipe/create")
     public Recipe createRecipe(@PathVariable("uid") int userId, @RequestBody Recipe recipe, HttpSession httpSession) {
-        User sessionUser = (User) httpSession.getAttribute("user");
+        /*User sessionUser = (User) httpSession.getAttribute("user");
         Optional<User> maybeUser = userRepository.findById(userId);
 
         if (maybeUser.isPresent()) {
@@ -73,7 +78,16 @@ public class RecipeService {
                 return recipe;
             }
         }
-        return null;
+        return null;*/
+    	/*List<Food> foods;
+    	for(Ingredient ingredient : recipe.getIngredients()) {
+    		ingredient.getFood().getIngredients().add(ingredient);
+    	}*/
+    	System.out.println("Let's save this sucker!");
+    	System.out.println(recipe);
+    	System.out.println(recipe.getDietLabels());
+    	System.out.println(recipe.getIngredients());
+        return recipeRepository.save(recipe);
     }
 
     @PostMapping("/api/user/{uid}/recipe/save")
@@ -105,6 +119,4 @@ public class RecipeService {
     public void deleteRecipe(@PathVariable("rid") int recipeId) {
         recipeRepository.deleteById(recipeId);
     }
-
-    
 }
