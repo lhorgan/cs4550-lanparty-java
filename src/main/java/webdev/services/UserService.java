@@ -12,7 +12,7 @@ import webdev.repositories.UserRepository;
 import javax.servlet.http.HttpSession;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
 public class UserService {
 
     @Autowired
@@ -135,9 +135,22 @@ public class UserService {
 
         if (potentialuser.size() != 0) {
             session.setAttribute("user", potentialuser.get(0));
+            System.out.println("Found user, setting session!");
             return potentialuser.get(0);
         }
         return null;
+    }
+    
+    @GetMapping("/api/user/current")
+    public User getLoggedInUser(HttpSession session) {
+    	User user = (User) session.getAttribute("user");
+    	if(user != null) {
+    		System.out.println("User is not null!");
+    	}
+    	else {
+    		System.out.println("Damn, the user is null");
+    	}
+    	return user;
     }
 
     @PostMapping("/api/logout")
