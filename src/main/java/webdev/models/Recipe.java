@@ -27,6 +27,10 @@ public class Recipe {
     private String description;
     private String instructions;
     
+    @OneToMany(mappedBy="recipe")
+    @JsonIgnore
+    private List<Review> reviews;
+    
     @ManyToMany(
         cascade = {
             CascadeType.PERSIST,
@@ -191,4 +195,11 @@ public class Recipe {
     public void setSavedByUser(List<User> savedByUser) {
         this.savedByUser = savedByUser;
     }
+
+    public void setReviews(List<Review> reviews) {
+    	this.reviews = reviews;
+    }
+	public List<Review> getReviews() {
+		return this.reviews;
+	}
 }

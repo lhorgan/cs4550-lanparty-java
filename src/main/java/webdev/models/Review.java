@@ -14,6 +14,9 @@ public class Review {
     @ManyToOne
     @JsonIgnore
     private User user;
+    
+    @ManyToOne
+    private Recipe recipe;
 
     public int getId() {
         return id;

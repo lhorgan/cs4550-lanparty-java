@@ -95,4 +95,9 @@ public class CustomRecipeRepository implements RecipeRepository {
 	public <S extends Recipe> Iterable<S> saveAll(Iterable<S> recipes) {
 		return recipeRepository.saveAll(recipes);
 	}
+
+	@Override
+	public Optional<Recipe> findRecipeByURI(String uri) {
+		return this.recipeRepository.findRecipeByURI(uri);
+	}
 }
