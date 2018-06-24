@@ -113,19 +113,21 @@ public class RecipeService {
     	String[] searchTerms = query.split(" ");
     	
     	for(int i = 0; i < recipes.size(); i++) {
-    		boolean foundRecipe = false;
-    		List<Ingredient> ingredients = (List<Ingredient>) recipes.get(i).getIngredients();
-    		for(int j = 0; j < ingredients.size(); j++) {
-    			for(int k = 0; k < searchTerms.length; k++) {
-    				if(searchTerms[k].equals(ingredients.get(j).getFood().getLabel())) {
-    					matches.add(recipes.get(i));
-    					foundRecipe = true;
-    					break;
-    				}
-    			}
-    			if(foundRecipe) {
-    				break;
-    			}
+    		if(!recipes.get(i).isPrivate()) {
+	    		boolean foundRecipe = false;
+	    		List<Ingredient> ingredients = (List<Ingredient>) recipes.get(i).getIngredients();
+	    		for(int j = 0; j < ingredients.size(); j++) {
+	    			for(int k = 0; k < searchTerms.length; k++) {
+	    				if(searchTerms[k].equals(ingredients.get(j).getFood().getLabel())) {
+	    					matches.add(recipes.get(i));
+	    					foundRecipe = true;
+	    					break;
+	    				}
+	    			}
+	    			if(foundRecipe) {
+	    				break;
+	    			}
+	    		}
     		}
     	}
     	

@@ -2,7 +2,12 @@ package webdev.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import net.bytebuddy.asm.Advice.This;
+
 import javax.persistence.*;
+
+import org.hibernate.Hibernate;
+
 import java.util.Date;
 import java.util.List;
 
@@ -55,7 +60,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
     
-    @ManyToMany(
+    /*@ManyToMany(
         cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
@@ -67,7 +72,24 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "user_id_b")
     )
     @JsonIgnore
-    private List<User> following;
+    private List<User> following;*/
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="tbl_following",
+     joinColumns=@JoinColumn(name="followerId"),
+     inverseJoinColumns=@JoinColumn(name="followingId")
+    )
+    @JsonIgnore
+    private List<User> followings;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="tbl_following",
+     joinColumns=@JoinColumn(name="followingId"),
+     inverseJoinColumns=@JoinColumn(name="followerId")
+    )
+    @JsonIgnore
+    private List<User> followers;
+
 
     public int getId() {
         return id;
@@ -201,11 +223,24 @@ public class User {
         isChef = chef;
     }
 
-    public List<User> getFollowing() {
-        return following;
+    public List<User> getFollowers() {
+        return followers;
     }
 
-    public void setFollowing(List<User> following) {
-        this.following = following;
+    public void setFollowers(List<User> followers) {
+        this.followers = followers;
+    }
+    
+    public List<User> getFollowings() {
+    	//Hibernate.initialize(this.createdRecipes);
+        return followings;
+    }
+
+    public void setFollowings(List<User> following) {
+        this.followings = following;
+    }
+    
+    public void follow(User user) {
+    	this.followings.add(user);
     }
 }

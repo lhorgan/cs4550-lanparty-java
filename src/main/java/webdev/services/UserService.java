@@ -57,12 +57,12 @@ public class UserService {
             user.setRole(newUser.getRole());
             user.setDateOfBirth(newUser.getDateOfBirth());
             user.setCreatedRecipes(newUser.getCreatedRecipes());
-            user.setSavedRecipes(newUser.getSavedRecipes());
-            user.setReviews(newUser.getReviews());
+            //user.setSavedRecipes(newUser.getSavedRecipes());
+            //user.setReviews(newUser.getReviews());
             user.setAdmin(newUser.isAdmin());
             user.setHasReputation(newUser.isHasReputation());
             user.setChef(newUser.isChef());
-            user.setFollowing(newUser.getFollowing());
+            //user.setFollowings(newUser.getFollowings());
             user = userRepository.save(user);
             
             User sessionUser = (User) session.getAttribute("user");
@@ -99,24 +99,18 @@ public class UserService {
         return null;
     }
 
-    @PostMapping("/api/user/{userId}/follow/{followUserId}")
-    public User followUser(@PathVariable("userId") int userId, @PathVariable("followingUserId") int followUserId,
+    @PutMapping("/api/user/follow/{userToFollowId}")
+    public User followUser(@PathVariable("userToFollowId") int userToFollowId,
                            HttpSession httpSession) {
         User sessionUser = (User) httpSession.getAttribute("user");
-        Optional<User> maybeUser = userRepository.findById(userId);
-        Optional<User> maybeFollowUser = userRepository.findById(followUserId);
+        Optional<User> data = userRepository.findById(userToFollowId);
 
-        if (maybeUser.isPresent() && maybeFollowUser.isPresent()) {
-            User user = maybeUser.get();
-            User followUser = maybeFollowUser.get();
+        if (data.isPresent() && sessionUser != null) {
+            User userToFollow = data.get();
 
-            if (user.getId() == sessionUser.getId()) {
-                List<User> following = user.getFollowing();
-                following.add(followUser);
-                user.setFollowing(following);
-                userRepository.save(user);
-                return followUser;
-            }
+            sessionUser.follow(userToFollow);
+            httpSession.setAttribute("user", sessionUser);
+            return userRepository.save(sessionUser);
         }
         return null;
     }
@@ -157,6 +151,17 @@ public class UserService {
     		System.out.println("Damn, the user is null");
     	}
     	return user;
+    }
+    
+    @GetMapping("/api/user/following/list")
+    public List<User> getFollowing(HttpSession session) {
+    	//System.out.println("THIS IS THE FUNCTION WE ARE IN");
+		User loggedIn = (User) session.getAttribute("user");
+		if(loggedIn != null) {
+			System.out.println("LENGTH OF FOLLOWING LIST: " + loggedIn.getFollowings().size());
+			return loggedIn.getFollowings();
+		}
+		return null;
     }
 
     @PostMapping("/api/logout")
