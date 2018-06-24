@@ -50,13 +50,14 @@ public class ReviewService {
 
     }
     
-    @GetMapping("/api/review/uri/{recipeUri}")
-    public List<Review> findReviewsForRecipeByUri(@PathVariable("recipeUri") String recipeUri) {
+    @GetMapping("/api/review/uri/")
+    public List<Review> findReviewsForRecipeByUri(@RequestParam("uri") String recipeUri) {
     	Optional<Recipe> data = recipeRepository.findRecipeByURI(recipeUri);
     	if(data.isPresent()) {
     		Recipe recipe = data.get();
     		return recipe.getReviews();
     	}
+    	System.out.println("couldn't find recipe " + recipeUri);
     	return null;
     }
 
@@ -70,7 +71,7 @@ public class ReviewService {
         return null;
     }
 
-    @PostMapping("/api/user/{uid}/review")
+    /*@PostMapping("/api/user/{uid}/review")
     public Review createReview(@PathVariable("uid") int userId, @RequestBody Review review, HttpSession httpSession) {
         Optional<User> maybeUser = userRepository.findById(userId);
         User sessionUser = (User) httpSession.getAttribute("user");
@@ -88,8 +89,21 @@ public class ReviewService {
             }
         }
         return null;
+    }*/
+    
+    @PostMapping("/api/review/id/{recipeId}")
+    public Review createReview(@PathVariable("recipeId") int recipeId, @RequestBody Review review, HttpSession httpSession) {
+    	Optional<Recipe> data = recipeRepository.findById(recipeId);
+    	User user = (User) httpSession.getAttribute("user");
+    	if(data.isPresent() && user != null) {
+    		Recipe recipe = data.get();
+    		review.setRecipe(recipe);
+    		return reviewRepository.save(review);
+    	}
+    	System.out.println("error, are you logged in?");
+    	return null;
     }
-
+    
     @DeleteMapping("/api/review/{rid}")
     public void deleteReview(@PathVariable("rid") int reviewId, HttpSession httpSession) {
         User sessionUser = (User) httpSession.getAttribute("user");

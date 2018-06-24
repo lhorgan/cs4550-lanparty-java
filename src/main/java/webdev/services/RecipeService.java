@@ -62,8 +62,8 @@ public class RecipeService {
         return null;
     }
 
-    @PostMapping("/api/user/{uid}/recipe/create")
-    public Recipe createRecipe(@PathVariable("uid") int userId, @RequestBody Recipe recipe, HttpSession httpSession) {
+    @PostMapping("/api/recipe/create")
+    public Recipe createRecipe(@RequestBody Recipe recipe, HttpSession httpSession) {
         /*User sessionUser = (User) httpSession.getAttribute("user");
         Optional<User> maybeUser = userRepository.findById(userId);
 
@@ -86,9 +86,9 @@ public class RecipeService {
     		ingredient.getFood().getIngredients().add(ingredient);
     	}*/
     	System.out.println("Let's save this sucker!");
-    	System.out.println(recipe);
-    	System.out.println(recipe.getDietLabels());
-    	System.out.println(recipe.getIngredients());
+    	//System.out.println(recipe);
+    	//System.out.println(recipe.getDietLabels());
+    	//System.out.println(recipe.getIngredients());
         return recipeRepository.save(recipe);
     }
     

@@ -49,4 +49,12 @@ public class Review {
     public void setReview(String review) {
         this.review = review;
     }
+    
+    public Recipe getRecipe() {
+    	return this.recipe;
+    }
+    
+    public void setRecipe(Recipe recipe) {
+    	this.recipe = recipe;
+    }
 }

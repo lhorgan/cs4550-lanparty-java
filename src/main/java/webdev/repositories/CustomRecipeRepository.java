@@ -71,18 +71,28 @@ public class CustomRecipeRepository implements RecipeRepository {
 		return recipeRepository.findById(id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <S extends Recipe> S save(S recipe) {
 		//System.out.println("\nSAVING RECIPEEEEEE\n");
-		for(Ingredient ingredient: recipe.getIngredients()) {
-			Food f = ingredient.getFood();
-			f.addIngredient(ingredient);
-			foodRepository.save(f);
-			
-			Measure m = ingredient.getMeasure();
-			m.addIngredient(ingredient);
-			measureRepository.save(m);
-			
+		if(recipe.getIngredients() != null) {
+			for(Ingredient ingredient: recipe.getIngredients()) {
+				Food f = ingredient.getFood();
+				f.addIngredient(ingredient);
+				foodRepository.save(f);
+				
+				Measure m = ingredient.getMeasure();
+				m.addIngredient(ingredient);
+				measureRepository.save(m);
+				
+			}
+		}
+		else if(recipe.getUri() != null) {
+			Optional<Recipe> data = recipeRepository.findRecipeByURI(recipe.getUri());
+			if(data.isPresent()) {
+				System.out.println("this recipe already exists");
+				return (S) data.get();
+			}
 		}
 		
 		/*for(DietLabel label : recipe.getDietLabels()) {
