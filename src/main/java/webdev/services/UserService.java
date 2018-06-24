@@ -44,7 +44,7 @@ public class UserService {
     }
 
     @PutMapping("/api/user/{userId}")
-    public User updateUser(@RequestBody User newUser, @PathVariable("userId") int userId) {
+    public User updateUser(@RequestBody User newUser, @PathVariable("userId") int userId, HttpSession session) {
         Optional<User> potentialUser = userRepository.findById(userId);
         if (potentialUser.isPresent()) {
             User user = potentialUser.get();
@@ -63,7 +63,13 @@ public class UserService {
             user.setHasReputation(newUser.isHasReputation());
             user.setChef(newUser.isChef());
             user.setFollowing(newUser.getFollowing());
-            userRepository.save(user);
+            user = userRepository.save(user);
+            
+            User sessionUser = (User) session.getAttribute("user");
+            if(sessionUser != null && sessionUser.getId() == user.getId()) {
+            	session.setAttribute("user", user);
+            }
+            
             return user;
         }
         return null;
