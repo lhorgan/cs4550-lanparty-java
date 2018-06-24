@@ -159,7 +159,18 @@ public class UserService {
 		User loggedIn = (User) session.getAttribute("user");
 		if(loggedIn != null) {
 			System.out.println("LENGTH OF FOLLOWING LIST: " + loggedIn.getFollowings().size());
-			return loggedIn.getFollowings();
+			if(loggedIn.getFollowings() != null) {
+				List<User> followings = loggedIn.getFollowings();
+				for(int i = 0; i < followings.size(); i++) {
+					User u = followings.get(i);
+					u.setCreatedRecipes(null);
+					u.setSavedRecipes(null);
+					u.setEndorsedRecipes(null);
+					u.setReviews(null);
+					followings.set(i, u);
+				}
+				return followings;
+			}
 		}
 		return null;
     }
