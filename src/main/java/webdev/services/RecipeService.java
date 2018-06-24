@@ -51,6 +51,19 @@ public class RecipeService {
         }
         return null;
     }
+    
+    @GetMapping("/api/recipe/{recipeId}/user")
+    public User getCreatedByUser(@PathVariable("recipeId") int recipeId) {
+    	Optional<Recipe> data = recipeRepository.findById(recipeId);
+    	if(data.isPresent()) {
+    		Recipe recipe = data.get();
+    		User user = recipe.getCreatedByUser();
+    		System.out.println("We found a user!");
+    		return user;
+    	}
+    	System.out.println("couldn't find a user for recipe");
+    	return null;
+    }
 
     @GetMapping("/api/user/{uid}/recipe/saved")
     public List<Recipe> findRecipesSavedByUser(@PathVariable("uid") int userId) {
@@ -89,6 +102,7 @@ public class RecipeService {
     	//System.out.println(recipe);
     	//System.out.println(recipe.getDietLabels());
     	//System.out.println(recipe.getIngredients());
+    	recipe.setCreatedByUser((User) httpSession.getAttribute("user"));
         return recipeRepository.save(recipe);
     }
     
@@ -144,6 +158,22 @@ public class RecipeService {
             }
         }
         return null;
+    }
+    
+    @GetMapping("/api/recipe/{recipeId}/endorse")
+    public User endorseRecipe(@PathVariable("recipeId") int recipeId, HttpSession session) {
+    	User user = (User) session.getAttribute("user");
+    	if(user != null) {
+    		if(user.isChef()) {
+	    		Optional<Recipe> data = recipeRepository.findById(recipeId);
+	    		if(data.isPresent()) {
+	    			Recipe recipe = data.get();
+	    			user.endorseRecipe(recipe);
+	    			return userRepository.save(user);
+	    		}
+    		}
+    	}
+    	return null;
     }
 
     @DeleteMapping("/api/recipe/{rid}")

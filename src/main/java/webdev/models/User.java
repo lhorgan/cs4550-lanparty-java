@@ -25,6 +25,7 @@ public class User {
 
     @OneToMany(mappedBy="createdByUser")
     private List<Recipe> createdRecipes;
+    
     @ManyToMany(
         cascade = {
             CascadeType.PERSIST,
@@ -32,13 +33,28 @@ public class User {
         }
     )
     @JoinTable(
-        name = "recipe_ingredient",
-        joinColumns = @JoinColumn(name = "recipe_id"),
-        inverseJoinColumns = @JoinColumn(name = "ingredient_id")
+        name = "user_saved_recipe",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "recipe_id")
     )
     private List<Recipe> savedRecipes;
+    
+    @ManyToMany(
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        }
+    )
+    @JoinTable(
+        name = "user_endorsed_recipe",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "recipe_id")
+    )
+    private List<Recipe> endorsedRecipes;
+    
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
+    
     @ManyToMany(
         cascade = {
             CascadeType.PERSIST,
@@ -139,6 +155,18 @@ public class User {
 
     public void setSavedRecipes(List<Recipe> savedRecipes) {
         this.savedRecipes = savedRecipes;
+    }
+    
+    public List<Recipe> getEndorsedRecipes() {
+        return endorsedRecipes;
+    }
+
+    public void setEndorsedRecipes(List<Recipe> endorsedRecipes) {
+        this.endorsedRecipes = endorsedRecipes;
+    }
+    
+    public void endorseRecipe(Recipe recipe) {
+    	endorsedRecipes.add(recipe);
     }
 
     public List<Review> getReviews() {

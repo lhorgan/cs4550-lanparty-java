@@ -21,6 +21,7 @@ public class Recipe {
     private String url;
     private int yield;
     private float calories;
+    private boolean isPrivate;
     //private List<Integer> dietLabels;
     //private List<Integer> healthLabels;
 
@@ -72,9 +73,14 @@ public class Recipe {
     @ManyToOne
     @JsonIgnore
     private User createdByUser;
+    
     @ManyToMany
     @JsonIgnore
     private List<User> savedByUser;
+    
+    @ManyToMany
+    @JsonIgnore
+    private List<User> endoresedByUser;
 
     public int getId() {
         return id;
@@ -201,5 +207,13 @@ public class Recipe {
     }
 	public List<Review> getReviews() {
 		return this.reviews;
+	}
+
+	public boolean isPrivate() {
+		return isPrivate;
+	}
+
+	public void setPrivate(boolean isPrivate) {
+		this.isPrivate = isPrivate;
 	}
 }
