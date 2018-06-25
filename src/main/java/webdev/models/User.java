@@ -25,7 +25,7 @@ public class User {
     private String role;
     private Date dateOfBirth;
     private boolean isAdmin;
-    private boolean hasReputation;
+    private boolean isReputable;
     private boolean isChef;
 
     @OneToMany(mappedBy="createdByUser")
@@ -179,6 +179,10 @@ public class User {
         this.savedRecipes = savedRecipes;
     }
     
+    public void saveRecipe(Recipe recipe) {
+    	savedRecipes.add(recipe);
+    }
+    
     public List<Recipe> getEndorsedRecipes() {
         return endorsedRecipes;
     }
@@ -207,12 +211,12 @@ public class User {
         isAdmin = admin;
     }
 
-    public boolean isHasReputation() {
-        return hasReputation;
+    public boolean isReputable() {
+        return isReputable;
     }
 
-    public void setHasReputation(boolean hasReputation) {
-        this.hasReputation = hasReputation;
+    public void setReputable(boolean isReputable) {
+        this.isReputable = isReputable;
     }
 
     public boolean isChef() {

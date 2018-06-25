@@ -13,6 +13,8 @@ import webdev.repositories.UserRepository;
 
 import javax.servlet.http.HttpSession;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +52,22 @@ public class RecipeService {
             return user.getCreatedRecipes();
         }
         return null;
+    }
+    
+    @PutMapping("/api/recipe/{recipeId}/privatize") // #capitalism, this function is now 75% more efficient
+    public Recipe privatizeRecipe(@PathVariable("recipeId") int recipeId, HttpSession session) {
+    	User user = (User) session.getAttribute(("user"));
+		if(user.isReputable()) {
+			List<Recipe> createdRecipes = user.getCreatedRecipes();
+			for(int i = 0; i < createdRecipes.size(); i++) {
+				if(createdRecipes.get(i).getId() == recipeId) {
+					Recipe r = createdRecipes.get(i);
+					r.setPrivate(true);
+					return recipeRepository.save(r);
+				}
+			}
+		}
+    	return null;
     }
     
     @GetMapping("/api/recipe/{recipeId}/user")
@@ -102,7 +120,10 @@ public class RecipeService {
     	//System.out.println(recipe);
     	//System.out.println(recipe.getDietLabels());
     	//System.out.println(recipe.getIngredients());
-    	recipe.setCreatedByUser((User) httpSession.getAttribute("user"));
+    	if(recipe.getUri() == null) {
+    		recipe.setCreatedByUser((User) httpSession.getAttribute("user"));
+    	}
+    	
         return recipeRepository.save(recipe);
     }
     
@@ -162,10 +183,10 @@ public class RecipeService {
         return null;
     }
     
-    @GetMapping("/api/recipe/{recipeId}/endorse")
+    @PutMapping("/api/recipe/{recipeId}/endorse")
     public User endorseRecipe(@PathVariable("recipeId") int recipeId, HttpSession session) {
     	User user = (User) session.getAttribute("user");
-    	if(user != null) {
+    	/*if(user != null) {
     		if(user.isChef()) {
 	    		Optional<Recipe> data = recipeRepository.findById(recipeId);
 	    		if(data.isPresent()) {
@@ -173,6 +194,20 @@ public class RecipeService {
 	    			user.endorseRecipe(recipe);
 	    			return userRepository.save(user);
 	    		}
+    		}
+    	}*/
+    	return null;
+    }
+    
+    @PutMapping("/api/recipe/{recipeId}/save")
+    public User saveRecipe(@PathVariable("recipeId") int recipeId, HttpSession session) {
+    	User user = (User) session.getAttribute("user");
+    	if(user != null) {
+    		Optional<Recipe> data = recipeRepository.findById(recipeId);
+    		if(data.isPresent()) {
+    			Recipe recipe = data.get();
+    			//user.saveRecipe(recipe);
+    			return userRepository.save(user);
     		}
     	}
     	return null;

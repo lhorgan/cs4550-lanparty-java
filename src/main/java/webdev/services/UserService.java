@@ -60,7 +60,7 @@ public class UserService {
             //user.setSavedRecipes(newUser.getSavedRecipes());
             //user.setReviews(newUser.getReviews());
             user.setAdmin(newUser.isAdmin());
-            user.setHasReputation(newUser.isHasReputation());
+            user.setReputable(newUser.isReputable());
             user.setChef(newUser.isChef());
             //user.setFollowings(newUser.getFollowings());
             user = userRepository.save(user);

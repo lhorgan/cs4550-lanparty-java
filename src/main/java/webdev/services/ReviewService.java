@@ -98,7 +98,7 @@ public class ReviewService {
     	if(data.isPresent() && user != null) {
     		Recipe recipe = data.get();
     		review.setRecipe(recipe);
-    		user.setHasReputation(true);
+    		user.setReputable(true);
     		userRepository.save(user); // give user some street cred
     		return reviewRepository.save(review);
     	}
