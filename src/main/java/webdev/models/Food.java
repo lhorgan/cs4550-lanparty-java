@@ -19,7 +19,7 @@ public class Food {
     
     @OneToMany(mappedBy="food")
     @JsonIgnore
-    private List<Ingredient> ingredients; // ingredients I belong to
+    private List<Ingredient> ingredients = new ArrayList<Ingredient>(); // ingredients I belong to
     
     /*public int getId() {
         return id;

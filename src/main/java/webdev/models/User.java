@@ -9,6 +9,7 @@ import javax.persistence.*;
 import org.hibernate.Hibernate;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -40,10 +41,10 @@ public class User {
     )
     @JoinTable(
         name = "user_saved_recipe",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "recipe_id")
+        joinColumns = @JoinColumn(name = "user_saved_id"),
+        inverseJoinColumns = @JoinColumn(name = "recipe_saved_id")
     )
-    private Set<Recipe> savedRecipes;
+    private Set<Recipe> savedRecipes = new HashSet<Recipe>();
     
     @ManyToMany(
         cascade = {
@@ -53,10 +54,10 @@ public class User {
     )
     @JoinTable(
         name = "user_endorsed_recipe",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "recipe_id")
+        joinColumns = @JoinColumn(name = "user_endorsed_id"),
+        inverseJoinColumns = @JoinColumn(name = "recipe_endorsed_id")
     )
-    private Set<Recipe> endorsedRecipes;
+    private Set<Recipe> endorsedRecipes = new HashSet<Recipe>();
     
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;

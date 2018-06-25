@@ -63,7 +63,11 @@ public class RecipeService {
 			for(int i = 0; i < createdRecipes.size(); i++) {
 				if(createdRecipes.get(i).getId() == recipeId) {
 					Recipe r = createdRecipes.get(i);
-					r.setPrivate(true);
+					r.setPrivate(!r.isPrivate());
+					r.setDietLabels(null);
+					r.setIngredients(null);
+					r.setSavedByUser(null);
+					r.setReviews(null);
 					return recipeRepository.save(r);
 				}
 			}
@@ -207,6 +211,11 @@ public class RecipeService {
     		Optional<Recipe> data = recipeRepository.findById(recipeId);
     		if(data.isPresent()) {
     			Recipe recipe = data.get();
+    			/*Set<User> savedByUsers = recipe.getSavedByUser();
+    			savedByUsers.add(user);	
+    			recipe.setSavedByUser(savedByUsers);
+    			recipeRepository.save(recipe);
+    			return user;*/
     			user.saveRecipe(recipe);
     			return userRepository.save(user);
     		}

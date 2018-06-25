@@ -16,7 +16,7 @@ public class Ingredient {
     
     private float weight;
     
-    @ManyToOne(cascade=CascadeType.MERGE)
+    @ManyToOne(cascade=CascadeType.MERGE, fetch=FetchType.EAGER)
     private Food food;
     
     @ManyToMany
