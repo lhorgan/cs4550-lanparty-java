@@ -99,6 +99,7 @@ public class ReviewService {
     		Recipe recipe = data.get();
     		review.setRecipe(recipe);
     		user.setReputable(true);
+    		httpSession.setAttribute("user", user); // update the user to be reputable
     		userRepository.save(user); // give user some street cred
     		return reviewRepository.save(review);
     	}
