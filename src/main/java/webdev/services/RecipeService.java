@@ -130,6 +130,16 @@ public class RecipeService {
         return recipeRepository.save(recipe);
     }
     
+    @GetMapping("/api/recipe/uri")
+    public Recipe getRecipeByURI(@RequestParam("uri") String uri) {
+    	Optional<Recipe> data = recipeRepository.findRecipeByURI(uri);
+    	if(data.isPresent()) {
+    		Recipe recipe = data.get();
+    		return recipe;
+    	}
+    	return null;
+    }
+    
     @GetMapping("api/recipe/search/{query}/page/{page}")
     public List<Recipe> search(@PathVariable String query, @PathVariable int page) {
     	List<Recipe> recipes = (List<Recipe>) recipeRepository.findAll();
