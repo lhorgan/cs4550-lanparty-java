@@ -211,6 +211,16 @@ public class RecipeService {
     	return null;
     }
     
+    @GetMapping("api/recipe/{recipeId}/endorsedBy")
+    public Set<User> recipeEndorsedBy(@PathVariable("recipeId") int recipeId) {
+    	Optional data = recipeRepository.findById(recipeId);
+    	if (data.isPresent()) {
+    		Recipe recipe = (Recipe) data.get();
+    		return recipe.getEndorsedByUser();
+    	}
+    	return null;
+    }
+    
     @PutMapping("/api/recipe/{recipeId}/save")
     public User saveRecipe(@PathVariable("recipeId") int recipeId, HttpSession session) {
     	User user = (User) session.getAttribute("user");

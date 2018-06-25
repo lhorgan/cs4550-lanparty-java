@@ -81,7 +81,7 @@ public class Recipe {
     
     @ManyToMany(mappedBy="endorsedRecipes")
     @JsonIgnore
-    private Set<User> endoresedByUser;
+    private Set<User> endorsedByUser;
 
     public int getId() {
         return id;
@@ -201,6 +201,14 @@ public class Recipe {
 
     public void setSavedByUser(Set<User> savedByUser) {
         this.savedByUser = savedByUser;
+    }
+    
+    public Set<User> getEndorsedByUser() {
+    	return endorsedByUser;
+    }
+    
+    public void setEndorsedByUser(Set<User> endorsedByUser) {
+    	this.endorsedByUser = endorsedByUser;
     }
 
     public void setReviews(List<Review> reviews) {
