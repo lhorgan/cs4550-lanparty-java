@@ -2,8 +2,6 @@ package webdev.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import net.bytebuddy.asm.Advice.This;
-
 import javax.persistence.*;
 
 import org.hibernate.Hibernate;

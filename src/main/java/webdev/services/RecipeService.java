@@ -13,8 +13,6 @@ import webdev.repositories.UserRepository;
 
 import javax.servlet.http.HttpSession;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
