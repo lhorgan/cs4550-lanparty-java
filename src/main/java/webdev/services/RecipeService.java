@@ -193,12 +193,19 @@ public class RecipeService {
     	User user = (User) session.getAttribute("user");
     	if(user != null) {
     		if(user.isChef()) {
-	    		Optional<Recipe> data = recipeRepository.findById(recipeId);
-	    		if(data.isPresent()) {
-	    			Recipe recipe = data.get();
-	    			user.endorseRecipe(recipe);
-	    			return userRepository.save(user);
-	    		}
+    			Optional<User> userFromDBData = userRepository.findById(user.getId());
+    			if(userFromDBData.isPresent()) {
+    				System.out.println("FUCK YEAHHHHHHHHHHHHHHHH");
+    				User userFromDB = userFromDBData.get();
+    				Optional<Recipe> data = recipeRepository.findById(recipeId);
+    	    		if(data.isPresent()) {
+    	    			System.out.println("DOUBLE FUCK YEAHHHHHHHHHHHH");
+    	    			Recipe recipe = data.get();
+    	    			userFromDB.endorseRecipe(recipe);
+    	    			session.setAttribute("user", userFromDB);
+    	    			return userRepository.save(userFromDB);
+    	    		}
+    			}
     		}
     	}
     	return null;
@@ -208,16 +215,17 @@ public class RecipeService {
     public User saveRecipe(@PathVariable("recipeId") int recipeId, HttpSession session) {
     	User user = (User) session.getAttribute("user");
     	if(user != null) {
-    		Optional<Recipe> data = recipeRepository.findById(recipeId);
-    		if(data.isPresent()) {
-    			Recipe recipe = data.get();
-    			/*Set<User> savedByUsers = recipe.getSavedByUser();
-    			savedByUsers.add(user);	
-    			recipe.setSavedByUser(savedByUsers);
-    			recipeRepository.save(recipe);
-    			return user;*/
-    			user.saveRecipe(recipe);
-    			return userRepository.save(user);
+    		Optional<User> userFromDBData = userRepository.findById(user.getId());
+    		if(userFromDBData.isPresent()) {
+    			Optional<Recipe> data = recipeRepository.findById(recipeId);
+    			User userFromDB = userFromDBData.get();
+        		if(data.isPresent()) {
+        			System.out.println("Well yo we're getting here haha");
+        			Recipe recipe = data.get();
+        			userFromDB.saveRecipe(recipe);
+        			session.setAttribute("user", userFromDB);
+        			return userRepository.save(userFromDB);
+        		}
     		}
     	}
     	return null;

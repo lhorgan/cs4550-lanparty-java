@@ -75,11 +75,11 @@ public class Recipe {
     @JsonIgnore
     private User createdByUser;
     
-    @ManyToMany
+    @ManyToMany(mappedBy="savedRecipes")
     @JsonIgnore
     private Set<User> savedByUser;
     
-    @ManyToMany
+    @ManyToMany(mappedBy="endorsedRecipes")
     @JsonIgnore
     private Set<User> endoresedByUser;
 
@@ -154,7 +154,7 @@ public class Recipe {
 //    public void setTotalNutrients(List<NutrientInfo> totalNutrients) {
 //        this.totalNutrients = totalNutrients;
 //    }
-
+    	
 	  public List<DietLabelEntry> getDietLabels() {
 	      return this.dietlabels;
 	  }

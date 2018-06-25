@@ -35,22 +35,20 @@ public class User {
     
     @ManyToMany(
         cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
+            CascadeType.ALL
         }
     )
     @JoinTable(
         name = "user_saved_recipe",
-        joinColumns = @JoinColumn(name = "user_saved_id"),
-        inverseJoinColumns = @JoinColumn(name = "recipe_saved_id")
+        joinColumns = { @JoinColumn(name = "user_saved_id") },
+        inverseJoinColumns = { @JoinColumn(name = "recipe_saved_id") }
     )
     private Set<Recipe> savedRecipes = new HashSet<Recipe>();
     
     @ManyToMany(
-        cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-        }
+		cascade = {
+	            CascadeType.ALL
+	        }
     )
     @JoinTable(
         name = "user_endorsed_recipe",
