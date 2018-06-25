@@ -8,6 +8,7 @@ import javax.persistence.*;
 
 import org.hibernate.Hibernate;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +32,7 @@ public class User {
     private boolean isChef;
 
     @OneToMany(mappedBy="createdByUser")
-    private List<Recipe> createdRecipes;
+    private List<Recipe> createdRecipes = new ArrayList<Recipe>();
     
     @ManyToMany(
         cascade = {
@@ -58,7 +59,7 @@ public class User {
     private Set<Recipe> endorsedRecipes = new HashSet<Recipe>();
     
     @OneToMany(mappedBy = "user")
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<Review>();
     
     /*@ManyToMany(
         cascade = {
@@ -80,7 +81,7 @@ public class User {
      inverseJoinColumns=@JoinColumn(name="followingId")
     )
     @JsonIgnore
-    private List<User> followings;
+    private List<User> followings = new ArrayList<User>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="tbl_following",
@@ -88,7 +89,7 @@ public class User {
      inverseJoinColumns=@JoinColumn(name="followerId")
     )
     @JsonIgnore
-    private List<User> followers;
+    private List<User> followers = new ArrayList<User>();
 
 
     public int getId() {
