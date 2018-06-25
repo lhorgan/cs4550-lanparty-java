@@ -153,7 +153,7 @@ public class UserService {
     	return user;
     }
     
-    @GetMapping("/api/user/following/list")
+    /*@GetMapping("/api/user/following/list")
     public List<User> getFollowing(HttpSession session) {
     	//System.out.println("THIS IS THE FUNCTION WE ARE IN");
 		User loggedIn = (User) session.getAttribute("user");
@@ -170,6 +170,50 @@ public class UserService {
 					followings.set(i, u);
 				}
 				return followings;
+			}
+		}
+		return null;
+    }*/
+    
+	@GetMapping("/api/user/{uid}/following/list")
+	public List<User> getFollowings(@PathVariable("uid") int uid) {
+	  Optional<User> data = userRepository.findById(uid);
+	    if(data.isPresent()) {
+	      User user = data.get();
+	      System.out.println("LENGTH OF FOLLOWING LIST: " + user.getFollowings().size());
+	      if(user.getFollowings() != null) {
+	        List<User> followings = user.getFollowings();
+	        for(int i = 0; i < followings.size(); i++) {
+	          User u = followings.get(i);
+	          u.setCreatedRecipes(null);
+	          u.setSavedRecipes(null);
+	          u.setEndorsedRecipes(null);
+	          u.setReviews(null);
+	          followings.set(i, u);
+	        }
+	        return followings;
+	      }
+	    }
+	    return null;
+	}
+    
+    @GetMapping("/api/user/{uid}/followers/list")
+    public List<User> getFollowers(@PathVariable("uid") int uid) {
+    	Optional<User> data = userRepository.findById(uid);
+		if(data.isPresent()) {
+			User user = data.get();
+			System.out.println("LENGTH OF FOLLOWING LIST: " + user.getFollowers().size());
+			if(user.getFollowers() != null) {
+				List<User> followers = user.getFollowers();
+				for(int i = 0; i < followers.size(); i++) {
+					User u = followers.get(i);
+					u.setCreatedRecipes(null);
+					u.setSavedRecipes(null);
+					u.setEndorsedRecipes(null);
+					u.setReviews(null);
+					followers.set(i, u);
+				}
+				return followers;
 			}
 		}
 		return null;
