@@ -10,6 +10,7 @@ import org.hibernate.Hibernate;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name="user")
 public class User {
@@ -42,7 +43,7 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "recipe_id")
     )
-    private List<Recipe> savedRecipes;
+    private Set<Recipe> savedRecipes;
     
     @ManyToMany(
         cascade = {
@@ -55,7 +56,7 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "recipe_id")
     )
-    private List<Recipe> endorsedRecipes;
+    private Set<Recipe> endorsedRecipes;
     
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
@@ -171,11 +172,11 @@ public class User {
         this.createdRecipes = createdRecipes;
     }
 
-    public List<Recipe> getSavedRecipes() {
+    public Set<Recipe> getSavedRecipes() {
         return savedRecipes;
     }
 
-    public void setSavedRecipes(List<Recipe> savedRecipes) {
+    public void setSavedRecipes(Set<Recipe> savedRecipes) {
         this.savedRecipes = savedRecipes;
     }
     
@@ -183,11 +184,11 @@ public class User {
     	savedRecipes.add(recipe);
     }
     
-    public List<Recipe> getEndorsedRecipes() {
+    public Set<Recipe> getEndorsedRecipes() {
         return endorsedRecipes;
     }
 
-    public void setEndorsedRecipes(List<Recipe> endorsedRecipes) {
+    public void setEndorsedRecipes(Set<Recipe> endorsedRecipes) {
         this.endorsedRecipes = endorsedRecipes;
     }
     

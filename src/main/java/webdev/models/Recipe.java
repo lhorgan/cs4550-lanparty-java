@@ -9,6 +9,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.Cascade;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity(name="recipe")
 public class Recipe {
@@ -76,11 +77,11 @@ public class Recipe {
     
     @ManyToMany
     @JsonIgnore
-    private List<User> savedByUser;
+    private Set<User> savedByUser;
     
     @ManyToMany
     @JsonIgnore
-    private List<User> endoresedByUser;
+    private Set<User> endoresedByUser;
 
     public int getId() {
         return id;
@@ -194,11 +195,11 @@ public class Recipe {
         this.createdByUser = createdByUser;
     }
 
-    public List<User> getSavedByUser() {
+    public Set<User> getSavedByUser() {
         return savedByUser;
     }
 
-    public void setSavedByUser(List<User> savedByUser) {
+    public void setSavedByUser(Set<User> savedByUser) {
         this.savedByUser = savedByUser;
     }
 

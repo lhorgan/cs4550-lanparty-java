@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
@@ -84,7 +85,7 @@ public class RecipeService {
     }
 
     @GetMapping("/api/user/{uid}/recipe/saved")
-    public List<Recipe> findRecipesSavedByUser(@PathVariable("uid") int userId) {
+    public Set<Recipe> findRecipesSavedByUser(@PathVariable("uid") int userId) {
         Optional<User> maybeUser = userRepository.findById(userId);
         if (maybeUser.isPresent()) {
             User user = maybeUser.get();
@@ -167,10 +168,10 @@ public class RecipeService {
             User user = maybeUser.get();
 
             if (user.getId() == sessionUser.getId()) {
-                List<Recipe> recipes = user.getSavedRecipes();
+                Set<Recipe> recipes = user.getSavedRecipes();
                 recipes.add(recipe);
 
-                List<User> recipeSaves = recipe.getSavedByUser();
+                Set<User> recipeSaves = recipe.getSavedByUser();
                 recipeSaves.add(user);
 
                 recipe.setSavedByUser(recipeSaves);
@@ -186,7 +187,7 @@ public class RecipeService {
     @PutMapping("/api/recipe/{recipeId}/endorse")
     public User endorseRecipe(@PathVariable("recipeId") int recipeId, HttpSession session) {
     	User user = (User) session.getAttribute("user");
-    	/*if(user != null) {
+    	if(user != null) {
     		if(user.isChef()) {
 	    		Optional<Recipe> data = recipeRepository.findById(recipeId);
 	    		if(data.isPresent()) {
@@ -195,7 +196,7 @@ public class RecipeService {
 	    			return userRepository.save(user);
 	    		}
     		}
-    	}*/
+    	}
     	return null;
     }
     
@@ -206,7 +207,7 @@ public class RecipeService {
     		Optional<Recipe> data = recipeRepository.findById(recipeId);
     		if(data.isPresent()) {
     			Recipe recipe = data.get();
-    			//user.saveRecipe(recipe);
+    			user.saveRecipe(recipe);
     			return userRepository.save(user);
     		}
     	}
