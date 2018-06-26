@@ -31,7 +31,15 @@ public class UserService {
         if (username != null) {
             return (List<User>) userRepository.findUserByUsername(username);
         }
-        return (List<User>) userRepository.findAll();
+        List<User> users = (List<User>) userRepository.findAll();
+        /*List<User> active = new ArrayList<User>();
+        for(int i = 0; i < users.size(); i++) {
+        	if(!users.get(i).isDeactivated()) {
+        		active.add(users.get(i));
+        	}
+        }
+        return active;*/
+        return users;
     }
 
     @GetMapping("/api/user/{userId}")
@@ -143,14 +151,24 @@ public class UserService {
     
     @GetMapping("/api/user/current")
     public User getLoggedInUser(HttpSession session) {
-    	User user = (User) session.getAttribute("user");
-    	if(user != null) {
-    		System.out.println("User is not null!");
+    	User sessionUser = (User) session.getAttribute("user");
+    	if(sessionUser != null) {
+	    	Optional<User> userFromDBData = userRepository.findById(sessionUser.getId());
+	    	User user = null;
+	    	if(userFromDBData.isPresent()) {
+	    		user = userFromDBData.get();
+	    	}
+	    	session.setAttribute("user", user);
+	    	
+	    	if(user != null) {
+	    		System.out.println("User is not null!");
+	    	}
+	    	else {
+	    		System.out.println("Damn, the user is null");
+	    	}
+	    	return user;
     	}
-    	else {
-    		System.out.println("Damn, the user is null");
-    	}
-    	return user;
+    	return null;
     }
     
     /*@GetMapping("/api/user/following/list")
@@ -219,7 +237,7 @@ public class UserService {
 		return null;
     }
 
-    @PostMapping("/api/logout")
+    @GetMapping("/api/logout")
     public void logout(HttpSession session) {
         session.invalidate();
         return;

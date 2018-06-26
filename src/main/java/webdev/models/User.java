@@ -28,6 +28,7 @@ public class User {
     private boolean isAdmin;
     private boolean isReputable;
     private boolean isChef;
+    private boolean deactivated;
 
     @OneToMany(mappedBy="createdByUser")
     private List<Recipe> createdRecipes = new ArrayList<Recipe>();
@@ -246,4 +247,12 @@ public class User {
     public void follow(User user) {
     	this.followings.add(user);
     }
+
+	public boolean isDeactivated() {
+		return deactivated;
+	}
+
+	public void setDeactivated(boolean deactivated) {
+		this.deactivated = deactivated;
+	}
 }
