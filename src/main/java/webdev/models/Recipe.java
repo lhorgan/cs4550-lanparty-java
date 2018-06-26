@@ -9,6 +9,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.Cascade;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity(name="recipe")
 public class Recipe {
@@ -21,11 +22,16 @@ public class Recipe {
     private String url;
     private int yield;
     private float calories;
+    private boolean isPrivate;
     //private List<Integer> dietLabels;
     //private List<Integer> healthLabels;
 
     private String description;
     private String instructions;
+    
+    @OneToMany(mappedBy="recipe")
+    @JsonIgnore
+    private List<Review> reviews;
     
     @ManyToMany(
         cascade = {
@@ -68,9 +74,14 @@ public class Recipe {
     @ManyToOne
     @JsonIgnore
     private User createdByUser;
-    @ManyToMany
+    
+    @ManyToMany(mappedBy="savedRecipes")
     @JsonIgnore
-    private List<User> savedByUser;
+    private Set<User> savedByUser;
+    
+    @ManyToMany(mappedBy="endorsedRecipes")
+    @JsonIgnore
+    private Set<User> endorsedByUser;
 
     public int getId() {
         return id;
@@ -143,7 +154,7 @@ public class Recipe {
 //    public void setTotalNutrients(List<NutrientInfo> totalNutrients) {
 //        this.totalNutrients = totalNutrients;
 //    }
-
+    	
 	  public List<DietLabelEntry> getDietLabels() {
 	      return this.dietlabels;
 	  }
@@ -184,11 +195,34 @@ public class Recipe {
         this.createdByUser = createdByUser;
     }
 
-    public List<User> getSavedByUser() {
+    public Set<User> getSavedByUser() {
         return savedByUser;
     }
 
-    public void setSavedByUser(List<User> savedByUser) {
+    public void setSavedByUser(Set<User> savedByUser) {
         this.savedByUser = savedByUser;
     }
+    
+    public Set<User> getEndorsedByUser() {
+    	return endorsedByUser;
+    }
+    
+    public void setEndorsedByUser(Set<User> endorsedByUser) {
+    	this.endorsedByUser = endorsedByUser;
+    }
+
+    public void setReviews(List<Review> reviews) {
+    	this.reviews = reviews;
+    }
+	public List<Review> getReviews() {
+		return this.reviews;
+	}
+
+	public boolean isPrivate() {
+		return isPrivate;
+	}
+
+	public void setPrivate(boolean isPrivate) {
+		this.isPrivate = isPrivate;
+	}
 }

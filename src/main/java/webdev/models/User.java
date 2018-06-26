@@ -3,8 +3,14 @@ package webdev.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+
+import org.hibernate.Hibernate;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name="user")
 public class User {
@@ -20,26 +26,41 @@ public class User {
     private String role;
     private Date dateOfBirth;
     private boolean isAdmin;
-    private boolean hasReputation;
+    private boolean isReputable;
     private boolean isChef;
+    private boolean deactivated;
 
     @OneToMany(mappedBy="createdByUser")
-    private List<Recipe> createdRecipes;
+    private List<Recipe> createdRecipes = new ArrayList<Recipe>();
+    
     @ManyToMany(
         cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
+            CascadeType.ALL
         }
     )
     @JoinTable(
-        name = "recipe_ingredient",
-        joinColumns = @JoinColumn(name = "recipe_id"),
-        inverseJoinColumns = @JoinColumn(name = "ingredient_id")
+        name = "user_saved_recipe",
+        joinColumns = { @JoinColumn(name = "user_saved_id") },
+        inverseJoinColumns = { @JoinColumn(name = "recipe_saved_id") }
     )
-    private List<Recipe> savedRecipes;
-    @OneToMany(mappedBy = "user")
-    private List<Review> reviews;
+    private Set<Recipe> savedRecipes = new HashSet<Recipe>();
+    
     @ManyToMany(
+		cascade = {
+	            CascadeType.ALL
+	        }
+    )
+    @JoinTable(
+        name = "user_endorsed_recipe",
+        joinColumns = @JoinColumn(name = "user_endorsed_id"),
+        inverseJoinColumns = @JoinColumn(name = "recipe_endorsed_id")
+    )
+    private Set<Recipe> endorsedRecipes = new HashSet<Recipe>();
+    
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews = new ArrayList<Review>();
+    
+    /*@ManyToMany(
         cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
@@ -51,7 +72,24 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "user_id_b")
     )
     @JsonIgnore
-    private List<User> following;
+    private List<User> following;*/
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="tbl_following",
+     joinColumns=@JoinColumn(name="followerId"),
+     inverseJoinColumns=@JoinColumn(name="followingId")
+    )
+    @JsonIgnore
+    private List<User> followings = new ArrayList<User>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="tbl_following",
+     joinColumns=@JoinColumn(name="followingId"),
+     inverseJoinColumns=@JoinColumn(name="followerId")
+    )
+    @JsonIgnore
+    private List<User> followers = new ArrayList<User>();
+
 
     public int getId() {
         return id;
@@ -133,12 +171,28 @@ public class User {
         this.createdRecipes = createdRecipes;
     }
 
-    public List<Recipe> getSavedRecipes() {
+    public Set<Recipe> getSavedRecipes() {
         return savedRecipes;
     }
 
-    public void setSavedRecipes(List<Recipe> savedRecipes) {
+    public void setSavedRecipes(Set<Recipe> savedRecipes) {
         this.savedRecipes = savedRecipes;
+    }
+    
+    public void saveRecipe(Recipe recipe) {
+    	savedRecipes.add(recipe);
+    }
+    
+    public Set<Recipe> getEndorsedRecipes() {
+        return endorsedRecipes;
+    }
+
+    public void setEndorsedRecipes(Set<Recipe> endorsedRecipes) {
+        this.endorsedRecipes = endorsedRecipes;
+    }
+    
+    public void endorseRecipe(Recipe recipe) {
+    	endorsedRecipes.add(recipe);
     }
 
     public List<Review> getReviews() {
@@ -157,12 +211,12 @@ public class User {
         isAdmin = admin;
     }
 
-    public boolean isHasReputation() {
-        return hasReputation;
+    public boolean isReputable() {
+        return isReputable;
     }
 
-    public void setHasReputation(boolean hasReputation) {
-        this.hasReputation = hasReputation;
+    public void setReputable(boolean isReputable) {
+        this.isReputable = isReputable;
     }
 
     public boolean isChef() {
@@ -173,11 +227,32 @@ public class User {
         isChef = chef;
     }
 
-    public List<User> getFollowing() {
-        return following;
+    public List<User> getFollowers() {
+        return followers;
     }
 
-    public void setFollowing(List<User> following) {
-        this.following = following;
+    public void setFollowers(List<User> followers) {
+        this.followers = followers;
     }
+    
+    public List<User> getFollowings() {
+    	//Hibernate.initialize(this.createdRecipes);
+        return followings;
+    }
+
+    public void setFollowings(List<User> following) {
+        this.followings = following;
+    }
+    
+    public void follow(User user) {
+    	this.followings.add(user);
+    }
+
+	public boolean isDeactivated() {
+		return deactivated;
+	}
+
+	public void setDeactivated(boolean deactivated) {
+		this.deactivated = deactivated;
+	}
 }

@@ -14,6 +14,9 @@ public class Review {
     @ManyToOne
     @JsonIgnore
     private User user;
+    
+    @ManyToOne
+    private Recipe recipe;
 
     public int getId() {
         return id;
@@ -45,5 +48,13 @@ public class Review {
 
     public void setReview(String review) {
         this.review = review;
+    }
+    
+    public Recipe getRecipe() {
+    	return this.recipe;
+    }
+    
+    public void setRecipe(Recipe recipe) {
+    	this.recipe = recipe;
     }
 }

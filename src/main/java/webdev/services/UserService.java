@@ -31,7 +31,15 @@ public class UserService {
         if (username != null) {
             return (List<User>) userRepository.findUserByUsername(username);
         }
-        return (List<User>) userRepository.findAll();
+        List<User> users = (List<User>) userRepository.findAll();
+        /*List<User> active = new ArrayList<User>();
+        for(int i = 0; i < users.size(); i++) {
+        	if(!users.get(i).isDeactivated()) {
+        		active.add(users.get(i));
+        	}
+        }
+        return active;*/
+        return users;
     }
 
     @GetMapping("/api/user/{userId}")
@@ -44,7 +52,7 @@ public class UserService {
     }
 
     @PutMapping("/api/user/{userId}")
-    public User updateUser(@RequestBody User newUser, @PathVariable("userId") int userId) {
+    public User updateUser(@RequestBody User newUser, @PathVariable("userId") int userId, HttpSession session) {
         Optional<User> potentialUser = userRepository.findById(userId);
         if (potentialUser.isPresent()) {
             User user = potentialUser.get();
@@ -57,13 +65,19 @@ public class UserService {
             user.setRole(newUser.getRole());
             user.setDateOfBirth(newUser.getDateOfBirth());
             user.setCreatedRecipes(newUser.getCreatedRecipes());
-            user.setSavedRecipes(newUser.getSavedRecipes());
-            user.setReviews(newUser.getReviews());
+            //user.setSavedRecipes(newUser.getSavedRecipes());
+            //user.setReviews(newUser.getReviews());
             user.setAdmin(newUser.isAdmin());
-            user.setHasReputation(newUser.isHasReputation());
+            user.setReputable(newUser.isReputable());
             user.setChef(newUser.isChef());
-            user.setFollowing(newUser.getFollowing());
-            userRepository.save(user);
+            //user.setFollowings(newUser.getFollowings());
+            user = userRepository.save(user);
+            
+            User sessionUser = (User) session.getAttribute("user");
+            if(sessionUser != null && sessionUser.getId() == user.getId()) {
+            	session.setAttribute("user", user);
+            }
+            
             return user;
         }
         return null;
@@ -93,24 +107,18 @@ public class UserService {
         return null;
     }
 
-    @PostMapping("/api/user/{userId}/follow/{followUserId}")
-    public User followUser(@PathVariable("userId") int userId, @PathVariable("followingUserId") int followUserId,
+    @PutMapping("/api/user/follow/{userToFollowId}")
+    public User followUser(@PathVariable("userToFollowId") int userToFollowId,
                            HttpSession httpSession) {
         User sessionUser = (User) httpSession.getAttribute("user");
-        Optional<User> maybeUser = userRepository.findById(userId);
-        Optional<User> maybeFollowUser = userRepository.findById(followUserId);
+        Optional<User> data = userRepository.findById(userToFollowId);
 
-        if (maybeUser.isPresent() && maybeFollowUser.isPresent()) {
-            User user = maybeUser.get();
-            User followUser = maybeFollowUser.get();
+        if (data.isPresent() && sessionUser != null) {
+            User userToFollow = data.get();
 
-            if (user.getId() == sessionUser.getId()) {
-                List<User> following = user.getFollowing();
-                following.add(followUser);
-                user.setFollowing(following);
-                userRepository.save(user);
-                return followUser;
-            }
+            sessionUser.follow(userToFollow);
+            httpSession.setAttribute("user", sessionUser);
+            return userRepository.save(sessionUser);
         }
         return null;
     }
@@ -143,17 +151,93 @@ public class UserService {
     
     @GetMapping("/api/user/current")
     public User getLoggedInUser(HttpSession session) {
-    	User user = (User) session.getAttribute("user");
-    	if(user != null) {
-    		System.out.println("User is not null!");
+    	User sessionUser = (User) session.getAttribute("user");
+    	if(sessionUser != null) {
+	    	Optional<User> userFromDBData = userRepository.findById(sessionUser.getId());
+	    	User user = null;
+	    	if(userFromDBData.isPresent()) {
+	    		user = userFromDBData.get();
+	    	}
+	    	session.setAttribute("user", user);
+	    	
+	    	if(user != null) {
+	    		System.out.println("User is not null!");
+	    	}
+	    	else {
+	    		System.out.println("Damn, the user is null");
+	    	}
+	    	return user;
     	}
-    	else {
-    		System.out.println("Damn, the user is null");
-    	}
-    	return user;
+    	return null;
+    }
+    
+    /*@GetMapping("/api/user/following/list")
+    public List<User> getFollowing(HttpSession session) {
+    	//System.out.println("THIS IS THE FUNCTION WE ARE IN");
+		User loggedIn = (User) session.getAttribute("user");
+		if(loggedIn != null) {
+			System.out.println("LENGTH OF FOLLOWING LIST: " + loggedIn.getFollowings().size());
+			if(loggedIn.getFollowings() != null) {
+				List<User> followings = loggedIn.getFollowings();
+				for(int i = 0; i < followings.size(); i++) {
+					User u = followings.get(i);
+					u.setCreatedRecipes(null);
+					u.setSavedRecipes(null);
+					u.setEndorsedRecipes(null);
+					u.setReviews(null);
+					followings.set(i, u);
+				}
+				return followings;
+			}
+		}
+		return null;
+    }*/
+    
+	@GetMapping("/api/user/{uid}/following/list")
+	public List<User> getFollowings(@PathVariable("uid") int uid) {
+	  Optional<User> data = userRepository.findById(uid);
+	    if(data.isPresent()) {
+	      User user = data.get();
+	      System.out.println("LENGTH OF FOLLOWING LIST: " + user.getFollowings().size());
+	      if(user.getFollowings() != null) {
+	        List<User> followings = user.getFollowings();
+	        for(int i = 0; i < followings.size(); i++) {
+	          User u = followings.get(i);
+	          u.setCreatedRecipes(null);
+	          u.setSavedRecipes(null);
+	          u.setEndorsedRecipes(null);
+	          u.setReviews(null);
+	          followings.set(i, u);
+	        }
+	        return followings;
+	      }
+	    }
+	    return null;
+	}
+    
+    @GetMapping("/api/user/{uid}/followers/list")
+    public List<User> getFollowers(@PathVariable("uid") int uid) {
+    	Optional<User> data = userRepository.findById(uid);
+		if(data.isPresent()) {
+			User user = data.get();
+			System.out.println("LENGTH OF FOLLOWING LIST: " + user.getFollowers().size());
+			if(user.getFollowers() != null) {
+				List<User> followers = user.getFollowers();
+				for(int i = 0; i < followers.size(); i++) {
+					User u = followers.get(i);
+					u.setCreatedRecipes(null);
+					u.setSavedRecipes(null);
+					u.setEndorsedRecipes(null);
+					u.setReviews(null);
+					followers.set(i, u);
+				}
+				return followers;
+			}
+		}
+		return null;
     }
 
-    @PostMapping("/api/logout")
+    @GetMapping("/api/logout")
     public void logout(HttpSession session) {
         session.invalidate();
         return;
